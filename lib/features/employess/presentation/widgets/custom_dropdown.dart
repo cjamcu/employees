@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomDropdown extends StatelessWidget {
   final String label;
@@ -16,6 +17,7 @@ class CustomDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: DropdownButtonFormField(
@@ -28,7 +30,7 @@ class CustomDropdown extends StatelessWidget {
             .map((e) => DropdownMenuItem(value: e.key, child: Text(e.value)))
             .toList(),
         onChanged: onChanged,
-        validator: (value) => value == null ? 'Campo requerido' : null,
+        validator: (value) => value == null ? l10n.requiredField : null,
       ),
     );
   }

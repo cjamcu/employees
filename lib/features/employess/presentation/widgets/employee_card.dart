@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../domain/entities/employee.dart';
 
 class EmployeeCard extends StatelessWidget {
@@ -14,6 +15,7 @@ class EmployeeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
       child: ExpansionTile(
@@ -29,13 +31,13 @@ class EmployeeCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('${employee.idTypeHumanReadable}: ${employee.idNumber}'),
-                Text('País: ${employee.countryHumanReadable}'),
-                Text('Área: ${employee.areaHumanReadable}'),
+                Text('${l10n.country}: ${employee.countryHumanReadable}'),
+                Text('${l10n.area}: ${employee.areaHumanReadable}'),
                 Text(
-                    'Fecha de ingreso: ${DateFormat('dd/MM/yyyy').format(employee.entryDate)}'),
-                Text('Estado: ${employee.isActive ? 'Activo' : 'Inactivo'}'),
+                    '${l10n.entryDate}: ${DateFormat('dd/MM/yyyy').format(employee.entryDate)}'),
+                Text('${l10n.status}: ${employee.isActive ? l10n.active : l10n.inactive}'),
                 const SizedBox(height: 8),
-                Row(
+                Row(  
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
@@ -47,7 +49,7 @@ class EmployeeCard extends StatelessWidget {
                     IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () {
-                        _showDeleteConfirmationDialog(context, employee);
+                        onDelete(employee);
                       },
                     ),
                   ],
@@ -57,34 +59,6 @@ class EmployeeCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  void _showDeleteConfirmationDialog(BuildContext context, Employee employee) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirmar eliminación'),
-          content: Text(
-              '¿Está seguro de que desea eliminar al empleado ${employee.firstName} ${employee.firstSurname}?'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('No'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Sí'),
-              onPressed: () {
-                onDelete(employee);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

@@ -87,7 +87,9 @@ class EmployeesDataSourceImpl implements EmployeesDataSource {
 
   @override
   Future<void> addEmployee(EmployeeModel employee) async {
-    await _firestore.collection('employees').add(employee.toJson());
+    await _firestore.collection('employees').doc(employee.id).set(
+          employee.toJson(),
+        );
   }
 
   @override

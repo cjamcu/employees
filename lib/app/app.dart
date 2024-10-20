@@ -1,6 +1,8 @@
-import 'package:employees/app/colors.dart';
-import 'package:employees/features/employess/presentation/screens/employess_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:employees/features/employess/presentation/screens/employess_screen.dart';
+import 'package:employees/app/colors.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -10,6 +12,17 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Employees',
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('es', ''),
+        Locale('en', ''),
+      ],
+      locale: const Locale('es', ''),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
         useMaterial3: true,

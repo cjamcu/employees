@@ -1,7 +1,9 @@
+import 'package:employees/features/employess/domain/entities/employee.dart';
 import 'package:employees/features/employess/presentation/screens/employee_form_screen.dart';
 import 'package:employees/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../bloc/list/employees_bloc.dart';
 import '../widgets/employee_list.dart';
 import '../widgets/employee_filter_bottom_sheet.dart';
@@ -26,9 +28,10 @@ class EmployeesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Empleados'),
+        title: Text(l10n.employeeList),
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_list),
@@ -42,18 +45,18 @@ class EmployeesView extends StatelessWidget {
           listener: (context, state) {
             if (state is EmployeesDeletedFailed) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
+                SnackBar(
                   backgroundColor: Colors.red,
-                  content: Text('Ocurrió un error al eliminar el empleado.'),
+                  content: Text(l10n.errorDeletingEmployee),
                 ),
               );
             }
 
             if (state is EmployeesDeletedSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
+                SnackBar(
                   backgroundColor: Colors.green,
-                  content: Text('Empleado eliminado correctamente.'),
+                  content: Text(l10n.employeeDeletedSuccessfully),
                 ),
               );
             }
@@ -67,16 +70,14 @@ class EmployeesView extends StatelessWidget {
             }
 
             if (state is EmployeesLoading) {
-              return const Center(
-                  child: LoadingView(message: 'Cargando empleados...'));
+              return Center(child: LoadingView(message: l10n.loadingEmployees));
             }
 
             if (state is EmployeesLoadedWithFilter &&
                 state.employeeData.employees.isEmpty) {
               return EmptyEmployeesView(
-                message:
-                    'No se encontraron empleados con los filtros aplicados. Aplique otros filtros para encontrar empleados.',
-                buttonText: 'Reestablecer filtros',
+                message: l10n.noEmployeesFoundFilter,
+                buttonText: l10n.resetFilters,
                 onButtonPressed: () =>
                     context.read<EmployeesBloc>().add(ResetFilter()),
               );
@@ -84,9 +85,8 @@ class EmployeesView extends StatelessWidget {
 
             if (state is EmployeesLoaded &&
                 state.employeeData.employees.isEmpty) {
-              return const EmptyEmployeesView(
-                message:
-                    'Agregue un nuevo empleado para comenzar. Presiona el botón más para agregar uno nuevo',
+              return EmptyEmployeesView(
+                message: l10n.addNewEmployeeToStart,
               );
             }
 
@@ -96,9 +96,15 @@ class EmployeesView extends StatelessWidget {
                 isLoadingMore: state is EmployeesLoadingMore,
                 onLoadMore: () =>
                     context.read<EmployeesBloc>().add(LoadMoreEmployees()),
-                onDelete: (employee) => context
-                    .read<EmployeesBloc>()
-                    .add(EmployeeDeleted(employee)),
+                onDelete: (employee) async {
+                  final confirmed =
+                      await _showDeleteConfirmationDialog(context, employee);
+                  if (confirmed != null && confirmed) {
+                    context
+                        .read<EmployeesBloc>()
+                        .add(EmployeeDeleted(employee));
+                  }
+                },
               );
             }
 
@@ -107,17 +113,9 @@ class EmployeesView extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final employee = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => EmployeeFormScreen()),
-          );
-
-          if (employee != null) {
-            context.read<EmployeesBloc>().add(EmployeeAdded(employee));
-          }
-        },
+        onPressed: () => _addNewEmployee(context),
         child: const Icon(Icons.add),
+        tooltip: l10n.addEmployee,
       ),
     );
   }
@@ -128,5 +126,44 @@ class EmployeesView extends StatelessWidget {
       isScrollControlled: true,
       builder: (BuildContext context) => const EmployeeFilterBottomSheet(),
     );
+  }
+
+  Future<bool?> _showDeleteConfirmationDialog(
+      BuildContext context, Employee employee) async {
+    final l10n = AppLocalizations.of(context)!;
+    return await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(l10n.deleteEmployee),
+          content: Text(l10n.confirmDeleteEmployee),
+          actions: <Widget>[
+            TextButton(
+              child: Text(l10n.no),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: Text(l10n.yes),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _addNewEmployee(BuildContext context) async {
+    final employee = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EmployeeFormScreen()),
+    );
+
+    if (employee != null) {
+      context.read<EmployeesBloc>().add(EmployeeAdded(employee));
+    }
   }
 }

@@ -5,12 +5,14 @@ class PhotoSection extends StatelessWidget {
   final File? photoFile;
   final VoidCallback onTakePhoto;
   final VoidCallback onRemovePhoto;
+  final String label;
 
   const PhotoSection({
     Key? key,
     required this.photoFile,
     required this.onTakePhoto,
     required this.onRemovePhoto,
+    required this.label,
   }) : super(key: key);
 
   @override
@@ -51,12 +53,12 @@ class PhotoSection extends StatelessWidget {
                   ),
                 ],
               )
-            : const Column(
+            : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.camera_alt, size: 40, color: Colors.grey),
-                  SizedBox(height: 8),
-                  Text('Tomar foto', style: TextStyle(color: Colors.grey)),
+                  const Icon(Icons.camera_alt, size: 40, color: Colors.grey),
+                  const SizedBox(height: 8),
+                  Text(label, style: const TextStyle(color: Colors.grey)),
                 ],
               ),
       ),

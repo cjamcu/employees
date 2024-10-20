@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 class CustomDatePicker extends StatelessWidget {
   final DateTime? selectedDate;
   final Function(DateTime) onDateChanged;
+  final String label;
+  final String selectDateText;
 
   const CustomDatePicker({
     Key? key,
     required this.selectedDate,
     required this.onDateChanged,
+    required this.label,
+    required this.selectDateText,
   }) : super(key: key);
 
   @override
@@ -27,13 +31,13 @@ class CustomDatePicker extends StatelessWidget {
           }
         },
         child: InputDecorator(
-          decoration: const InputDecoration(
-            labelText: 'Fecha de ingreso',
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: label,
+            border: const OutlineInputBorder(),
           ),
           child: Text(
             selectedDate == null
-                ? 'Seleccionar fecha'
+                ? selectDateText
                 : '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}',
           ),
         ),

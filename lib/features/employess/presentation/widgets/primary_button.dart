@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isLoading;
   final String? loadingText;
 
@@ -24,8 +24,8 @@ class PrimaryButton extends StatelessWidget {
           foregroundColor: Theme.of(context).colorScheme.onPrimary,
         ),
         onPressed: () {
-          if (!isLoading) {
-            onPressed();
+          if (!isLoading && onPressed != null) {
+            onPressed!();
           }
         },
         child: Row(
@@ -43,7 +43,7 @@ class PrimaryButton extends StatelessWidget {
                 ),
               ),
             Text(
-              isLoading ? loadingText! : text,
+              isLoading ? loadingText ?? text : text,
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

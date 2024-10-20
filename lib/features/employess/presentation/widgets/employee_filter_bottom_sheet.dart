@@ -2,13 +2,15 @@ import 'package:employees/features/employess/presentation/widgets/primary_button
 import 'package:employees/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/list/employees_bloc.dart';
+import 'package:employees/features/employess/presentation/bloc/list/employees_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EmployeeFilterBottomSheet extends StatelessWidget {
   const EmployeeFilterBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocProvider.value(
       value: getIt<EmployeesBloc>(),
       child: BlocBuilder<EmployeesBloc, EmployeesState>(
@@ -26,53 +28,49 @@ class EmployeeFilterBottomSheet extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text('Filtrar empleados',
+                  Text(l10n.filterEmployees,
                       style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(height: 8),
-                  _buildFilterTextField('Primer nombre', state.filter.firstName,
+                  _buildFilterTextField(l10n.firstName, state.filter.firstName,
                       (value) => _updateFilter(context, firstName: value)),
                   _buildFilterTextField(
-                      'Segundo nombre',
+                      l10n.otherNames,
                       state.filter.otherNames,
                       (value) => _updateFilter(context, otherNames: value)),
                   _buildFilterTextField(
-                      'Primer apellido',
+                      l10n.firstSurname,
                       state.filter.firstSurname,
                       (value) => _updateFilter(context, firstSurname: value)),
                   _buildFilterTextField(
-                      'Segundo apellido',
+                      l10n.secondSurname,
                       state.filter.secondSurname,
                       (value) => _updateFilter(context, secondSurname: value)),
                   _buildFilterDropdown(
-                      'Tipo de documento',
+                      l10n.idType,
                       state.filter.idType,
                       state.idTypes,
                       (value) => _updateFilter(context, idType: value)),
-                  _buildFilterTextField(
-                      'Número de cédula',
-                      state.filter.idNumber,
+                  _buildFilterTextField(l10n.idNumber, state.filter.idNumber,
                       (value) => _updateFilter(context, idNumber: value)),
                   _buildFilterDropdown(
-                      'País de empleo',
+                      l10n.employmentCountry,
                       state.filter.employmentCountry,
                       state.countries,
                       (value) =>
                           _updateFilter(context, employmentCountry: value)),
-                  _buildFilterTextField(
-                      'Correo electrónico',
-                      state.filter.email,
+                  _buildFilterTextField(l10n.email, state.filter.email,
                       (value) => _updateFilter(context, email: value)),
                   _buildFilterDropdown(
-                      'Estado',
+                      l10n.status,
                       state.filter.isActive,
-                      {'true': 'Activo', 'false': 'Inactivo'},
+                      {'true': l10n.active, 'false': l10n.inactive},
                       (value) =>
                           _updateFilter(context, isActive: value == 'true')),
                   const SizedBox(height: 8),
                   SizedBox(
                     width: double.infinity,
                     child: PrimaryButton(
-                      text: 'Aplicar filtros',
+                      text: l10n.applyFilters,
                       isLoading: state is EmployeesLoading,
                       onPressed: () {
                         context.read<EmployeesBloc>().add(ApplyFilter());
@@ -86,7 +84,7 @@ class EmployeeFilterBottomSheet extends StatelessWidget {
                       context.read<EmployeesBloc>().add(ResetFilter());
                       Navigator.pop(context);
                     },
-                    child: const Text('Reestablecer filtros'),
+                    child: Text(l10n.resetFilters),
                   ),
                 ],
               ),

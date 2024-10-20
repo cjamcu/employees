@@ -1,5 +1,4 @@
 import 'package:employees/features/employess/presentation/widgets/primary_button.dart';
-import 'package:employees/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,49 +7,31 @@ import 'package:employees/features/employess/presentation/widgets/custom_text_fi
 import 'package:employees/features/employess/presentation/widgets/custom_dropdown.dart';
 import 'package:employees/features/employess/presentation/widgets/custom_date_picker.dart';
 import 'package:employees/features/employess/presentation/widgets/photo_section.dart';
-
+import 'package:employees/main.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:io';
 
-class EmployeeFormScreen extends StatefulWidget {
+class EmployeeFormScreen extends StatelessWidget {
   EmployeeFormScreen({super.key});
 
-  @override
-  State<EmployeeFormScreen> createState() => _EmployeeFormScreenState();
-}
-
-class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
   final _formKey = GlobalKey<FormState>();
-
   final _firstNameController = TextEditingController();
-
   final _otherNamesController = TextEditingController();
-
   final _firstSurnameController = TextEditingController();
-
   final _secondSurnameController = TextEditingController();
-
   final _idNumberController = TextEditingController();
-
-  @override
-  void dispose() {
-    _firstNameController.dispose();
-    _otherNamesController.dispose();
-    _firstSurnameController.dispose();
-    _secondSurnameController.dispose();
-    _idNumberController.dispose();
-
-    super.dispose();
-  }
+  late final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
+    l10n = AppLocalizations.of(context)!;
     return BlocProvider.value(
       value: getIt<EmployeeFormBloc>(),
       child: BlocConsumer<EmployeeFormBloc, EmployeeFormState>(
-        listener: _handleStateChanges,
+        listener: (context, state) => _handleStateChanges(context, state),
         builder: (context, state) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Nuevo Empleado')),
+            appBar: AppBar(title: Text(l10n.newEmployee)),
             body: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -65,8 +46,8 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
                       const SizedBox(height: 16),
                       PrimaryButton(
                         isLoading: state is EmployeeFormSubmitting,
-                        text: 'Registrar Empleado',
-                        loadingText: 'Registrando...',
+                        text: l10n.registerEmployee,
+                        loadingText: l10n.registeringEmployee,
                         onPressed: () => _submitForm(context, state),
                       ),
                     ],
@@ -82,16 +63,12 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
 
   void _handleStateChanges(BuildContext context, EmployeeFormState state) {
     if (state is ImageUploadFailure) {
-      _showSnackBar(context,
-          'Ocurrió un error al subir la foto. Intenta nuevamente.', Colors.red);
+      _showSnackBar(context, l10n.photoUploadError, Colors.red);
     } else if (state is EmployeeFormSubmissionSuccess) {
-      _showSnackBar(context, 'Empleado registrado con éxito', Colors.green);
+      _showSnackBar(context, l10n.employeeRegisteredSuccess, Colors.green);
       Navigator.of(context).pop(state.employee);
     } else if (state is EmployeeFormSubmissionFailure) {
-      _showSnackBar(
-          context,
-          'Ocurrió un error al registrar el empleado. Intenta nuevamente.',
-          Colors.red);
+      _showSnackBar(context, l10n.employeeRegistrationError, Colors.red);
     }
   }
 
@@ -107,6 +84,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       onTakePhoto: () => _takePhoto(context),
       onRemovePhoto: () =>
           context.read<EmployeeFormBloc>().add(const PhotoRemoved()),
+      label: l10n.takePhoto,
     );
   }
 
@@ -115,65 +93,71 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       children: [
         CustomTextField(
           controller: _firstNameController,
-          label: 'Primer Nombre',
-          validator: _validateName,
+          label: l10n.firstName,
+          validator: (value) => _validateName(value),
         ),
         CustomTextField(
           controller: _otherNamesController,
-          label: 'Otros Nombres',
-          validator: _validateOtherNames,
+          label: l10n.otherNames,
+          validator: (value) => _validateOtherNames(value),
         ),
         CustomTextField(
           controller: _firstSurnameController,
-          label: 'Primer Apellido',
-          validator: _validateName,
+          label: l10n.firstSurname,
+          validator: (value) => _validateName(value),
         ),
         CustomTextField(
           controller: _secondSurnameController,
-          label: 'Segundo Apellido',
-          validator: _validateName,
+          label: l10n.secondSurname,
+          validator: (value) => _validateName(value),
         ),
         CustomDropdown(
-          label: 'País del empleo',
+          label: l10n.employmentCountry,
           value: state.data?.employmentCountry,
-          items: {'CO': 'Colombia', 'US': 'Estados Unidos'},
+          items: {
+            'CO': l10n.colombia,
+            'US': l10n.unitedStates,
+            'VE': l10n.venezuela
+          },
           onChanged: (value) => context
               .read<EmployeeFormBloc>()
               .add(EmploymentCountryChanged(value)),
         ),
         CustomDropdown(
-          label: 'Tipo de Identificación',
+          label: l10n.idType,
           value: state.data?.idType,
           items: {
-            0: 'Cédula de Ciudadanía',
-            1: 'Cédula de Extranjería',
-            2: 'Pasaporte',
-            3: 'Permiso Especial'
+            0: l10n.citizenshipCard,
+            1: l10n.foreignerID,
+            2: l10n.passport,
+            3: l10n.specialPermit
           },
           onChanged: (value) =>
               context.read<EmployeeFormBloc>().add(IdTypeChanged(value)),
         ),
         CustomTextField(
           controller: _idNumberController,
-          label: 'Número de Identificación',
-          validator: _validateIdNumber,
+          label: l10n.idNumber,
+          validator: (value) => _validateIdNumber(value),
         ),
         CustomDatePicker(
           selectedDate: state.data?.entryDate,
           onDateChanged: (date) =>
               context.read<EmployeeFormBloc>().add(EntryDateChanged(date)),
+          label: l10n.entryDate,
+          selectDateText: l10n.selectDate,
         ),
         CustomDropdown(
-          label: 'Área',
+          label: l10n.area,
           value: state.data?.area,
           items: {
-            0: 'Administración',
-            1: 'Financiera',
-            2: 'Compras',
-            3: 'Infraestructura',
-            4: 'Operación',
-            5: 'Talento Humano',
-            6: 'Servicios Varios'
+            0: l10n.administration,
+            1: l10n.finance,
+            2: l10n.purchasing,
+            3: l10n.infrastructure,
+            4: l10n.operations,
+            5: l10n.humanResources,
+            6: l10n.variousServices
           },
           onChanged: (value) =>
               context.read<EmployeeFormBloc>().add(AreaChanged(value)),
@@ -182,29 +166,15 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
     );
   }
 
-  Widget _buildSubmitButton(BuildContext context, EmployeeFormState state) {
-    return ElevatedButton(
-      onPressed: state is EmployeeFormSubmitting
-          ? null
-          : () => _submitForm(context, state),
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-      ),
-      child: state is EmployeeFormSubmitting
-          ? const CircularProgressIndicator()
-          : const Text('Registrar Empleado'),
-    );
-  }
-
   String? _validateName(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Campo requerido';
+      return l10n.requiredField;
     }
     if (value.length > 20) {
-      return 'Máximo 20 caracteres';
+      return l10n.max20Chars;
     }
     if (!RegExp(r'^[A-Z]+$').hasMatch(value)) {
-      return 'Solo letras mayúsculas sin acentos ni Ñ';
+      return l10n.onlyUppercaseLetters;
     }
     return null;
   }
@@ -214,23 +184,23 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       return null;
     }
     if (value.length > 50) {
-      return 'Máximo 50 caracteres';
+      return l10n.max50Chars;
     }
     if (!RegExp(r'^[A-Z ]+$').hasMatch(value)) {
-      return 'Solo letras mayúsculas sin acentos ni Ñ y espacios';
+      return l10n.onlyUppercaseLettersAndSpaces;
     }
     return null;
   }
 
   String? _validateIdNumber(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Campo requerido';
+      return l10n.requiredField;
     }
     if (value.length > 20) {
-      return 'Máximo 20 caracteres';
+      return l10n.max20Chars;
     }
     if (!RegExp(r'^[a-zA-Z0-9-]+$').hasMatch(value)) {
-      return 'Solo letras, números y guiones';
+      return l10n.onlyLettersNumbersAndHyphens;
     }
     return null;
   }
@@ -256,9 +226,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
           ));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content:
-                Text('Por favor, complete todos los campos y tome una foto')),
+        SnackBar(content: Text(l10n.pleaseCompleteAllFields)),
       );
     }
   }
