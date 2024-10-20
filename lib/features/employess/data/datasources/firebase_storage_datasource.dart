@@ -1,6 +1,9 @@
 import 'dart:io';
-import 'package:employees/features/employess/data/datasources/file_upload_datasource.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
+abstract class FilesDataSource {
+  Future<String> uploadImage(File imageFile);
+}
 
 class FirebaseStorageDataSourceImpl implements FilesDataSource {
   final FirebaseStorage _storage;

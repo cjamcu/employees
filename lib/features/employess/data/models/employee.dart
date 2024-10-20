@@ -72,4 +72,38 @@ class EmployeeModel extends Employee {
       'photoUrl': photoUrl,
     };
   }
+
+  copyWith({
+    String? id,
+    String? firstSurname,
+    String? secondSurname,
+    String? firstName,
+    String? otherNames,
+    String? employmentCountry,
+    int? idType,
+    String? idNumber,
+    String? email,
+    DateTime? entryDate,
+    int? area,
+    bool? isActive,
+    DateTime? registrationDate,
+    String? photoUrl,
+  }) {
+    return EmployeeModel(
+      id: id ?? this.id,
+      firstSurname: firstSurname ?? this.firstSurname,
+      secondSurname: secondSurname ?? this.secondSurname,
+      firstName: firstName ?? this.firstName,
+      otherNames: otherNames ?? this.otherNames,
+      employmentCountry: employmentCountry ?? this.employmentCountry,
+      idType: idType ?? this.idType,
+      idNumber: idNumber ?? this.idNumber,
+      email: email ?? this.email,
+      entryDate: entryDate ?? this.entryDate,
+      area: area ?? this.area,
+      isActive: isActive ?? this.isActive,
+      registrationDate: registrationDate ?? this.registrationDate,
+      photoUrl: photoUrl ?? this.photoUrl,
+    );
+  }
 }

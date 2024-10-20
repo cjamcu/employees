@@ -12,53 +12,60 @@ abstract class EmployeesDataSource {
 }
 
 class EmployeesDataSourceImpl implements EmployeesDataSource {
-  final FirebaseFirestore _firestoreDb;
+  final FirebaseFirestore _firestore;
 
-  EmployeesDataSourceImpl(this._firestoreDb);
+  EmployeesDataSourceImpl(this._firestore);
 
   @override
   Future<EmployeeData> getEmployees({
     required int page,
     required int limit,
   }) async {
-    final countSnapshot =
-        await _firestoreDb.collection('employees').count().get();
-    final totalEmployees = countSnapshot.count ?? 0;
-    final totalPages = (totalEmployees / limit).ceil();
+    final totalDocs = await _firestore.collection('employees').count().get();
+    final totalPages = (totalDocs.count! / limit).ceil();
 
-    if (page > totalPages || page < 1) {
-      throw Exception('The page requested is not valid.');
-    }
+    Query query = _firestore
+        .collection('employees')
+        .orderBy('registrationDate', descending: true);
 
-    Query query = _firestoreDb.collection('employees').limit(limit);
     if (page > 1) {
-      final startAfterSnapshot = await _firestoreDb
-          .collection('employees')
-          .limit((page - 1) * limit)
-          .get();
-
-      final lastDoc = startAfterSnapshot.docs.last;
-      query = query.startAfterDocument(lastDoc);
+      final lastDocSnapshot =
+          await _getLastDocumentOfPreviousPage(page - 1, limit);
+      if (lastDocSnapshot != null) {
+        query = query.startAfterDocument(lastDocSnapshot);
+      }
     }
+
+    query = query.limit(limit);
 
     final snapshot = await query.get();
-
     final employees = snapshot.docs
         .map((doc) =>
             EmployeeModel.fromJson(doc.data() as Map<String, dynamic>, doc.id))
         .toList();
 
     return EmployeeData(
+      employees: employees,
       page: page,
       totalPages: totalPages,
-      employees: employees,
     );
+  }
+
+  Future<DocumentSnapshot?> _getLastDocumentOfPreviousPage(
+      int page, int limit) async {
+    final query = _firestore
+        .collection('employees')
+        .orderBy('registrationDate', descending: true)
+        .limit(page * limit);
+
+    final snapshot = await query.get();
+    return snapshot.docs.isNotEmpty ? snapshot.docs.last : null;
   }
 
   @override
   Future<EmployeeData> getEmployeesWithFilter(
       Map<String, dynamic> filters) async {
-    Query query = _firestoreDb.collection('employees');
+    Query query = _firestore.collection('employees');
 
     filters.forEach((key, value) {
       query = query.where(key, isEqualTo: value);
@@ -80,12 +87,12 @@ class EmployeesDataSourceImpl implements EmployeesDataSource {
 
   @override
   Future<void> addEmployee(EmployeeModel employee) async {
-    await _firestoreDb.collection('employees').add(employee.toJson());
+    await _firestore.collection('employees').add(employee.toJson());
   }
 
   @override
   Future<bool> isEmailInUse(String email) async {
-    final result = await _firestoreDb
+    final result = await _firestore
         .collection('employees')
         .where('email', isEqualTo: email)
         .get();
@@ -94,6 +101,6 @@ class EmployeesDataSourceImpl implements EmployeesDataSource {
 
   @override
   Future<void> deleteEmployee(String employeeId) async {
-    await _firestoreDb.collection('employees').doc(employeeId).delete();
+    await _firestore.collection('employees').doc(employeeId).delete();
   }
 }

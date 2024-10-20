@@ -47,6 +47,8 @@ dependencies:
   uuid: ^4.5.1
   mocktail: ^1.0.4
   bloc_test: ^9.1.7
+  fake_cloud_firestore: ^3.0.3
+  firebase_storage_mocks: ^0.7.0
 
 dev_dependencies:
   flutter_test:
