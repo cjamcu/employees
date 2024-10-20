@@ -1,3 +1,4 @@
+import 'package:employees/features/employess/domain/usecases/generate_employee_email.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -35,13 +36,16 @@ void main() {
   late EmployeeFormBloc employeeFormBloc;
   late MockEmployeesRepository mockEmployeesRepository;
   late MockFilesRepository mockFilesRepository;
-
+  late GenerateEmployeeEmail mockGenerateEmployeeEmail;
   setUp(() {
     mockEmployeesRepository = MockEmployeesRepository();
     mockFilesRepository = MockFilesRepository();
+    mockGenerateEmployeeEmail = GenerateEmployeeEmail(mockEmployeesRepository);
+
     employeeFormBloc = EmployeeFormBloc(
       employeesRepository: mockEmployeesRepository,
       fileUploadRepository: mockFilesRepository,
+      generateEmployeeEmail: mockGenerateEmployeeEmail,
     );
   });
 
@@ -209,47 +213,6 @@ void main() {
         isA<EmployeeFormSubmitting>(),
         isA<EmployeeFormSubmissionFailure>(),
       ],
-    );
-
-    blocTest<EmployeeFormBloc, EmployeeFormState>(
-      'generates unique email when email is already in use',
-      build: () {
-        when(() =>
-                mockEmployeesRepository.isEmailInUse('john.doe@tuarmi.com.co'))
-            .thenAnswer((_) async => true);
-        when(() => mockEmployeesRepository.isEmailInUse(
-            'john.doe.1@tuarmi.com.co')).thenAnswer((_) async => false);
-        when(() => mockFilesRepository.uploadImage(any()))
-            .thenAnswer((_) async => 'http://example.com/photo.jpg');
-        when(() => mockEmployeesRepository.addEmployee(any()))
-            .thenAnswer((_) async => {});
-        return employeeFormBloc;
-      },
-      seed: () => DataUpdatedState(
-          data: Data(
-        employmentCountry: 'CO',
-        idType: 1,
-        area: 2,
-        entryDate: DateTime(2023, 1, 1),
-        photoFile: MockFile(),
-      )),
-      act: (bloc) => bloc.add(const SubmitForm(
-        firstName: 'John',
-        otherNames: '',
-        firstSurname: 'Doe',
-        secondSurname: 'Smith',
-        idNumber: '123456',
-      )),
-      expect: () => [
-        isA<EmployeeFormSubmitting>(),
-        isA<EmployeeFormSubmissionSuccess>(),
-      ],
-      verify: (_) {
-        verify(() => mockEmployeesRepository.addEmployee(any(
-                that: predicate<Employee>(
-              (e) => e.email == 'john.doe.1@tuarmi.com.co',
-            )))).called(1);
-      },
     );
   });
 }

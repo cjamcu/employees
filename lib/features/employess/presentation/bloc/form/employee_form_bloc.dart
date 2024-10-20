@@ -1,9 +1,10 @@
 import 'package:employees/features/employess/domain/entities/employee.dart';
+import 'package:employees/features/employess/domain/usecases/generate_employee_email.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
-import '../../../domain/repositories/employess_repository.dart';
-import '../../../domain/repositories/file_upload_repository.dart';
+import 'package:employees/features/employess/domain/repositories/employess_repository.dart';
+import 'package:employees/features/employess/domain/repositories/file_upload_repository.dart';
 import 'dart:io';
 
 part 'employee_form_event.dart';
@@ -12,10 +13,12 @@ part 'employee_form_state.dart';
 class EmployeeFormBloc extends Bloc<EmployeeFormEvent, EmployeeFormState> {
   final EmployeesRepository employeesRepository;
   final FilesRepository fileUploadRepository;
+  final GenerateEmployeeEmail generateEmployeeEmail;
 
   EmployeeFormBloc({
     required this.employeesRepository,
     required this.fileUploadRepository,
+    required this.generateEmployeeEmail,
   }) : super(const EmployeeFormInitial()) {
     on<EmploymentCountryChanged>(_onEmploymentCountryChanged);
     on<IdTypeChanged>(_onIdTypeChanged);
@@ -57,10 +60,10 @@ class EmployeeFormBloc extends Bloc<EmployeeFormEvent, EmployeeFormState> {
   void _onSubmitForm(SubmitForm event, Emitter<EmployeeFormState> emit) async {
     emit(EmployeeFormSubmitting(data: state.data));
     try {
-      final email = await _generateUniqueEmail(
-        event.firstName,
-        event.firstSurname,
-        state.data!.employmentCountry!,
+      final email = await generateEmployeeEmail.execute(
+        firstName: event.firstName,
+        lastName: event.firstSurname,
+        employmentCountry: state.data!.employmentCountry!,
       );
 
       String photoUrl = '';
@@ -91,31 +94,13 @@ class EmployeeFormBloc extends Bloc<EmployeeFormEvent, EmployeeFormState> {
       );
 
       await employeesRepository.addEmployee(employee);
-      emit(EmployeeFormSubmissionSuccess(data: state.data, employee: employee));
+      emit(EmployeeFormSubmissionSuccess(
+        data: const Data(),
+        employee: employee,
+      ));
     } catch (e) {
       emit(EmployeeFormSubmissionFailure(data: state.data));
     }
-  }
-
-  Future<String> _generateUniqueEmail(
-    String firstName,
-    String firstSurname,
-    String employmentCountry,
-  ) async {
-    final baseEmail =
-        '${firstName.toLowerCase()}.${firstSurname.toLowerCase()}';
-    final domain =
-        employmentCountry == 'CO' ? 'tuarmi.com.co' : 'armirene.com.ve';
-
-    var email = '$baseEmail@$domain';
-    var counter = 1;
-
-    while (await employeesRepository.isEmailInUse(email)) {
-      email = '$baseEmail.$counter@$domain';
-      counter++;
-    }
-
-    return email;
   }
 
   // Generate a unique id for the employee

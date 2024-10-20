@@ -6,6 +6,7 @@ import 'package:employees/features/employess/data/repositories/employess_reposit
 import 'package:employees/features/employess/data/repositories/files_repository.dart';
 import 'package:employees/features/employess/domain/repositories/employess_repository.dart';
 import 'package:employees/features/employess/domain/repositories/file_upload_repository.dart';
+import 'package:employees/features/employess/domain/usecases/generate_employee_email.dart';
 import 'package:employees/features/employess/presentation/bloc/form/employee_form_bloc.dart';
 import 'package:employees/features/employess/presentation/bloc/list/employees_bloc.dart';
 import 'package:employees/main.dart';
@@ -37,10 +38,16 @@ class EmployeesDI implements DI {
         employeesRepository: getIt(),
       ),
     );
+    getIt.registerLazySingleton<GenerateEmployeeEmail>(
+      () => GenerateEmployeeEmail(
+        getIt(),
+      ),
+    );
     getIt.registerLazySingleton<EmployeeFormBloc>(
       () => EmployeeFormBloc(
         employeesRepository: getIt(),
         fileUploadRepository: getIt(),
+        generateEmployeeEmail: getIt(),
       ),
     );
   }

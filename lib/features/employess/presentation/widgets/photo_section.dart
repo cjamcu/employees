@@ -8,12 +8,12 @@ class PhotoSection extends StatelessWidget {
   final String label;
 
   const PhotoSection({
-    Key? key,
+    super.key,
     required this.photoFile,
     required this.onTakePhoto,
     required this.onRemovePhoto,
     required this.label,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
