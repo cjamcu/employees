@@ -1,3 +1,4 @@
+import 'package:employees/features/employess/presentation/widgets/primary_button.dart';
 import 'package:employees/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -70,8 +71,9 @@ class EmployeeFilterBottomSheet extends StatelessWidget {
                   const SizedBox(height: 8),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
-                      child: const Text('Aplicar filtros'),
+                    child: PrimaryButton(
+                      text: 'Aplicar filtros',
+                      isLoading: state is EmployeesLoading,
                       onPressed: () {
                         context.read<EmployeesBloc>().add(ApplyFilter());
                         Navigator.pop(context);
