@@ -10,6 +10,7 @@ import 'package:employees/features/employess/presentation/widgets/photo_section.
 import 'package:employees/main.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:io';
+import 'package:employees/features/employess/domain/validators/employee_validators.dart';
 
 class EmployeeFormScreen extends StatelessWidget {
   EmployeeFormScreen({super.key});
@@ -21,10 +22,12 @@ class EmployeeFormScreen extends StatelessWidget {
   final _secondSurnameController = TextEditingController();
   final _idNumberController = TextEditingController();
   late final AppLocalizations l10n;
+  late final EmployeeValidators _validators;
 
   @override
   Widget build(BuildContext context) {
     l10n = AppLocalizations.of(context)!;
+    _validators = EmployeeValidators(l10n);
     return BlocProvider.value(
       value: getIt<EmployeeFormBloc>(),
       child: BlocConsumer<EmployeeFormBloc, EmployeeFormState>(
@@ -94,22 +97,22 @@ class EmployeeFormScreen extends StatelessWidget {
         CustomTextField(
           controller: _firstNameController,
           label: l10n.firstName,
-          validator: (value) => _validateName(value),
+          validator: _validators.validateName,
         ),
         CustomTextField(
           controller: _otherNamesController,
           label: l10n.otherNames,
-          validator: (value) => _validateOtherNames(value),
+          validator: _validators.validateOtherNames,
         ),
         CustomTextField(
           controller: _firstSurnameController,
           label: l10n.firstSurname,
-          validator: (value) => _validateName(value),
+          validator: _validators.validateName,
         ),
         CustomTextField(
           controller: _secondSurnameController,
           label: l10n.secondSurname,
-          validator: (value) => _validateName(value),
+          validator: _validators.validateName,
         ),
         CustomDropdown(
           label: l10n.employmentCountry,
@@ -138,7 +141,7 @@ class EmployeeFormScreen extends StatelessWidget {
         CustomTextField(
           controller: _idNumberController,
           label: l10n.idNumber,
-          validator: (value) => _validateIdNumber(value),
+          validator: _validators.validateIdNumber,
         ),
         CustomDatePicker(
           selectedDate: state.data?.entryDate,
@@ -164,45 +167,6 @@ class EmployeeFormScreen extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  String? _validateName(String? value) {
-    if (value == null || value.isEmpty) {
-      return l10n.requiredField;
-    }
-    if (value.length > 20) {
-      return l10n.max20Chars;
-    }
-    if (!RegExp(r'^[A-Z]+$').hasMatch(value)) {
-      return l10n.onlyUppercaseLetters;
-    }
-    return null;
-  }
-
-  String? _validateOtherNames(String? value) {
-    if (value == null || value.isEmpty) {
-      return null;
-    }
-    if (value.length > 50) {
-      return l10n.max50Chars;
-    }
-    if (!RegExp(r'^[A-Z ]+$').hasMatch(value)) {
-      return l10n.onlyUppercaseLettersAndSpaces;
-    }
-    return null;
-  }
-
-  String? _validateIdNumber(String? value) {
-    if (value == null || value.isEmpty) {
-      return l10n.requiredField;
-    }
-    if (value.length > 20) {
-      return l10n.max20Chars;
-    }
-    if (!RegExp(r'^[a-zA-Z0-9-]+$').hasMatch(value)) {
-      return l10n.onlyLettersNumbersAndHyphens;
-    }
-    return null;
   }
 
   void _takePhoto(BuildContext context) async {

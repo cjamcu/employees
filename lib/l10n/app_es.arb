@@ -16,10 +16,8 @@
   "takePhoto": "Tomar foto",
   "requiredField": "Campo requerido",
   "max20Chars": "Máximo 20 caracteres",
-  "onlyUppercaseLetters": "Solo letras mayúsculas sin acentos ni Ñ",
   "max50Chars": "Máximo 50 caracteres",
   "onlyUppercaseLettersAndSpaces": "Solo letras mayúsculas sin acentos ni Ñ y espacios",
-  "onlyLettersNumbersAndHyphens": "Solo letras, números y guiones",
   "pleaseCompleteAllFields": "Por favor, complete todos los campos y tome una foto",
   "photoUploadError": "Ocurrió un error al subir la foto. Intenta nuevamente.",
   "employeeRegisteredSuccess": "Empleado registrado con éxito",
@@ -67,5 +65,10 @@
   "country": "País",
   "email": "Correo electrónico",
   "noEmployeesFound": "No se encontraron empleados.",
-  "loading": "Cargando..."
+  "loading": "Cargando...",
+  "onlyUppercaseLetters": "Solo se permiten letras mayúsculas",
+  "noAccents": "No se permiten acentos",
+  "onlyLettersAndSpaces": "Solo se permiten letras y espacios",
+  "onlyLettersNumbersAndHyphens": "Solo se permiten letras, números y guiones"
+  
 }

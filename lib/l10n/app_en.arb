@@ -16,10 +16,8 @@
   "takePhoto": "Take photo",
   "requiredField": "Required field",
   "max20Chars": "Maximum 20 characters",
-  "onlyUppercaseLetters": "Only uppercase letters without accents or Ñ",
   "max50Chars": "Maximum 50 characters",
   "onlyUppercaseLettersAndSpaces": "Only uppercase letters without accents or Ñ and spaces",
-  "onlyLettersNumbersAndHyphens": "Only letters, numbers and hyphens",
   "pleaseCompleteAllFields": "Please complete all fields and take a photo",
   "photoUploadError": "An error occurred while uploading the photo. Please try again.",
   "employeeRegisteredSuccess": "Employee registered successfully",
@@ -68,5 +66,9 @@
 
   "email": "Email",
   "noEmployeesFound": "No employees found.",
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "onlyUppercaseLetters": "Only uppercase letters are allowed",
+  "noAccents": "Accents are not allowed",
+  "onlyLettersAndSpaces": "Only letters and spaces are allowed",
+  "onlyLettersNumbersAndHyphens": "Only letters, numbers, and hyphens are allowed"
 }
