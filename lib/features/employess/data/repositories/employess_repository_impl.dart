@@ -3,8 +3,6 @@ import 'package:employees/features/employess/data/models/employee.dart';
 import 'package:employees/features/employess/domain/entities/employee.dart';
 import 'package:employees/features/employess/domain/entities/employees_data.dart';
 import 'package:employees/features/employess/domain/repositories/employess_repository.dart';
-import 'package:faker/faker.dart';
-import 'package:uuid/uuid.dart';
 
 class EmployeesRepositoryImpl extends EmployeesRepository {
   final EmployeesDataSource employeesRemoteDataSource;
@@ -63,7 +61,6 @@ class EmployeesRepositoryImpl extends EmployeesRepository {
 
   @override
   Future<void> generateFakeEmployees(List<Employee> employees) async {
-    
     for (var employee in employees) {
       await employeesRemoteDataSource
           .addEmployee(EmployeeModel.fromEntity(employee));
