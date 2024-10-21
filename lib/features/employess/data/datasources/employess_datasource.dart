@@ -54,6 +54,7 @@ class EmployeesDataSourceImpl implements EmployeesDataSource {
       employees: employees,
       page: page,
       totalPages: totalPages,
+      totalEmployees: totalDocs.count ?? 0,
     );
   }
 
@@ -87,6 +88,7 @@ class EmployeesDataSourceImpl implements EmployeesDataSource {
     return EmployeeData(
       page: 1,
       totalPages: 1,
+      totalEmployees: snapshot.docs.length,
       employees: employees,
     );
   }

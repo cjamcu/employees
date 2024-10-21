@@ -1,5 +1,6 @@
 import 'package:employees/features/employess/domain/entities/employee.dart';
 import 'package:employees/features/employess/presentation/screens/employee_form_screen.dart';
+import 'package:employees/features/employess/presentation/widgets/custom_text_field.dart';
 import 'package:employees/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,13 +19,15 @@ class EmployeesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<EmployeesBloc>()..add(const LoadEmployees()),
-      child: const EmployeesView(),
+      child: EmployeesView(),
     );
   }
 }
 
 class EmployeesView extends StatelessWidget {
-  const EmployeesView({super.key});
+  EmployeesView({super.key});
+
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +38,7 @@ class EmployeesView extends StatelessWidget {
           l10n.employeeList,
         ),
       ),
+      
       body: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: BlocConsumer<EmployeesBloc, EmployeesState>(
@@ -90,14 +94,21 @@ class EmployeesView extends StatelessWidget {
               return Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(l10n.filter),
-                      IconButton(
-                        tooltip: l10n.filterEmployees,
-                        icon: const Icon(Icons.filter_list),
-                        onPressed: () => _showFilterBottomSheet(context),
-                      ),
+                      Text(
+                          'Cargados ${state.employeeData.employees.length} de ${state.employeeData.totalEmployees} empleados'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(l10n.filter),
+                          IconButton(
+                            tooltip: l10n.filterEmployees,
+                            icon: const Icon(Icons.filter_list),
+                            onPressed: () => _showFilterBottomSheet(context),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                   Expanded(
