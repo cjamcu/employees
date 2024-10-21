@@ -37,12 +37,13 @@ class EmployeesView extends StatelessWidget {
         ),
         actions: [
           IconButton(
+            tooltip: l10n.logs,
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => TalkerScreen(
                         talker: getIt<Talker>(),
-                        appBarTitle: 'Logs',
+                        appBarTitle: l10n.logs,
                         theme: const TalkerScreenTheme(
                           backgroundColor: Colors.white,
                           textColor: Colors.black,
