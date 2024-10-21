@@ -55,4 +55,12 @@ class EmployeeValidators {
     }
     return null;
   }
+
+  String? validateEmail(String? value) {
+    if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+        .hasMatch(value ?? '')) {
+      return l10n.invalidEmail;
+    }
+    return null;
+  }
 }

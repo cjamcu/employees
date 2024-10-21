@@ -97,7 +97,7 @@
       }
     }
   },
-  "logs": "Logs"
-  
+  "logs": "Logs",
+  "invalidEmail": "Correo electrónico inválido"
 
 }

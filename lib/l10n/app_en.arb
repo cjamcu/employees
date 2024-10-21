@@ -97,5 +97,6 @@
       }
     }
   },
-  "logs": "Logs"
+  "logs": "Logs",
+  "invalidEmail": "Invalid email"
 }

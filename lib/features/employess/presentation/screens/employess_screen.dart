@@ -114,27 +114,39 @@ class EmployeesView extends StatelessWidget {
                 },
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          l10n.loadedEmployees(
-                            state.employeeData.employees.length.toString(),
-                            state.employeeData.totalEmployees.toString(),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(l10n.filter),
-                            IconButton(
-                              tooltip: l10n.filterEmployees,
-                              icon: const Icon(Icons.filter_list),
-                              onPressed: () => _showFilterBottomSheet(context),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            l10n.loadedEmployees(
+                              state.employeeData.employees.length.toString(),
+                              state.employeeData.totalEmployees.toString(),
                             ),
-                          ],
-                        )
-                      ],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () => _showFilterBottomSheet(context),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(l10n.filter,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                    )),
+                                const SizedBox(width: 4),
+                                Icon(
+                                  Icons.filter_list,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                     Expanded(
                       child: EmployeeList(
@@ -166,8 +178,8 @@ class EmployeesView extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _addNewEmployee(context),
-        child: const Icon(Icons.add),
         tooltip: l10n.addEmployee,
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -176,7 +188,7 @@ class EmployeesView extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (BuildContext context) => const EmployeeFilterBottomSheet(),
+      builder: (BuildContext context) => EmployeeFilterBottomSheet(),
     );
   }
 
