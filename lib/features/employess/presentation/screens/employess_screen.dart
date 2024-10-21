@@ -27,8 +27,6 @@ class EmployeesScreen extends StatelessWidget {
 class EmployeesView extends StatelessWidget {
   EmployeesView({super.key});
 
- 
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -38,7 +36,6 @@ class EmployeesView extends StatelessWidget {
           l10n.employeeList,
         ),
       ),
-      
       body: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: BlocConsumer<EmployeesBloc, EmployeesState>(
@@ -91,46 +88,55 @@ class EmployeesView extends StatelessWidget {
             }
 
             if (state is EmployeesLoaded) {
-              return Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                          'Cargados ${state.employeeData.employees.length} de ${state.employeeData.totalEmployees} empleados'),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(l10n.filter),
-                          IconButton(
-                            tooltip: l10n.filterEmployees,
-                            icon: const Icon(Icons.filter_list),
-                            onPressed: () => _showFilterBottomSheet(context),
+              return RefreshIndicator(
+                onRefresh: () async {
+                  context.read<EmployeesBloc>().add(const LoadEmployees());
+                },
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          l10n.loadedEmployees(
+                            state.employeeData.employees.length.toString(),
+                            state.employeeData.totalEmployees.toString(),
                           ),
-                        ],
-                      )
-                    ],
-                  ),
-                  Expanded(
-                    child: EmployeeList(
-                      employeeData: state.employeeData,
-                      isLoadingMore: state is EmployeesLoadingMore,
-                      onLoadMore: () => context
-                          .read<EmployeesBloc>()
-                          .add(LoadMoreEmployees()),
-                      onDelete: (employee) async {
-                        final confirmed = await _showDeleteConfirmationDialog(
-                            context, employee);
-                        if (confirmed != null && confirmed) {
-                          context
-                              .read<EmployeesBloc>()
-                              .add(EmployeeDeleted(employee));
-                        }
-                      },
-                      onEdit: (employee) => _editEmployee(context, employee),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(l10n.filter),
+                            IconButton(
+                              tooltip: l10n.filterEmployees,
+                              icon: const Icon(Icons.filter_list),
+                              onPressed: () => _showFilterBottomSheet(context),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: EmployeeList(
+                        employeeData: state.employeeData,
+                        isLoadingMore: state is EmployeesLoadingMore,
+                        onLoadMore: () => context
+                            .read<EmployeesBloc>()
+                            .add(LoadMoreEmployees()),
+                        onDelete: (employee) async {
+                          final confirmed = await _showDeleteConfirmationDialog(
+                              context, employee);
+                          if (confirmed != null && confirmed) {
+                            context
+                                .read<EmployeesBloc>()
+                                .add(EmployeeDeleted(employee));
+                          }
+                        },
+                        onEdit: (employee) => _editEmployee(context, employee),
+                      ),
+                    ),
+                  ],
+                ),
               );
             }
 

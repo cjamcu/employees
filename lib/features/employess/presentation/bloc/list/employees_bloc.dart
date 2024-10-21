@@ -23,6 +23,7 @@ class EmployeesBloc extends Bloc<EmployeesEvent, EmployeesState> {
     on<EmployeeAdded>(_onEmployeeAdded);
     on<EmployeeDeleted>(_onEmployeeDeleted);
     on<EmployeeUpdated>(_onEmployeeUpdated);
+
   }
 
   void _onLoadEmployees(
@@ -62,6 +63,7 @@ class EmployeesBloc extends Bloc<EmployeesEvent, EmployeesState> {
               employees: updatedEmployees,
               page: newEmployeesData.page,
               totalPages: newEmployeesData.totalPages,
+              totalEmployees: newEmployeesData.totalEmployees,
             ),
             filter: currentState.filter,
           ));
@@ -108,6 +110,7 @@ class EmployeesBloc extends Bloc<EmployeesEvent, EmployeesState> {
         employees: updatedEmployees,
         page: currentState.employeeData.page,
         totalPages: currentState.employeeData.totalPages,
+        totalEmployees: currentState.employeeData.totalEmployees,
       ),
       filter: currentState.filter,
     ));
@@ -153,4 +156,6 @@ class EmployeesBloc extends Bloc<EmployeesEvent, EmployeesState> {
       filter: currentState.filter,
     ));
   }
+
+
 }

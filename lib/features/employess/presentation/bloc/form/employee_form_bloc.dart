@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:employees/features/employess/domain/entities/employee.dart';
 import 'package:employees/features/employess/domain/usecases/generate_employee_email.dart';
+import 'package:faker/faker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
@@ -29,6 +32,7 @@ class EmployeeFormBloc extends Bloc<EmployeeFormEvent, EmployeeFormState> {
     on<PhotoTaken>(_onPhotoTaken);
     on<PhotoRemoved>(_onPhotoRemoved);
     on<SubmitForm>(_onSubmitForm);
+    on<GenerateFakeEmployees>(_onGenerateFakeEmployees);
   }
 
   void _onInitializeEditForm(
@@ -132,5 +136,49 @@ class EmployeeFormBloc extends Bloc<EmployeeFormEvent, EmployeeFormState> {
     } catch (e) {
       emit(EmployeeFormSubmissionFailure(data: state.data));
     }
+  }
+
+  FutureOr<void> _onGenerateFakeEmployees(
+      GenerateFakeEmployees event, Emitter<EmployeeFormState> emit) async {
+    Future<List<Employee>> employees = Future.wait(
+      List.generate(
+        event.numberOfEmployees,
+        (index) async {
+          final registrationDate =
+              faker.date.dateTime(minYear: 2020, maxYear: 2023);
+          final entryDate = faker.date.dateTime(minYear: 2020, maxYear: 2023);
+          final isActive = faker.randomGenerator.boolean();
+          final employmentCountry = faker.randomGenerator.element([
+            'CO',
+            'VE',
+          ]);
+
+          final email = await generateEmployeeEmail.execute(
+            firstName: faker.person.firstName(),
+            lastName: faker.person.lastName(),
+            employmentCountry: employmentCountry,
+          );
+
+          return Employee(
+            id: Uuid().v4(),
+            firstSurname: faker.person.lastName().toUpperCase(),
+            secondSurname: faker.person.lastName().toUpperCase(),
+            firstName: faker.person.firstName().toUpperCase(),
+            employmentCountry: employmentCountry,
+            idType: faker.randomGenerator.integer(3) + 1,
+            idNumber: faker.randomGenerator.integer(99999999).toString(),
+            email: email,
+            entryDate: entryDate,
+            area: faker.randomGenerator.integer(5) + 1,
+            isActive: isActive,
+            registrationDate: registrationDate,
+            photoUrl: faker.image.image(width: 100, height: 100),
+          );
+        },
+      ),
+    );
+
+    await employeesRepository.generateFakeEmployees(await employees);
+    add(const InitializeCreateForm());
   }
 }

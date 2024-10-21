@@ -5,13 +5,14 @@ class PrimaryButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool isLoading;
   final String? loadingText;
-
+  final VoidCallback? onLongPress;
   const PrimaryButton({
     super.key,
     required this.text,
     required this.onPressed,
     this.isLoading = false,
     this.loadingText,
+    this.onLongPress,
   });
 
   @override
@@ -28,6 +29,7 @@ class PrimaryButton extends StatelessWidget {
             onPressed!();
           }
         },
+        onLongPress: onLongPress,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

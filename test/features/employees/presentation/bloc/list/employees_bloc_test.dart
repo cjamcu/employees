@@ -43,6 +43,7 @@ void main() {
     final tEmployeeData = EmployeeData(
       page: 1,
       totalPages: 1,
+      totalEmployees: 1,
       employees: [
         Employee(
           id: '1',

@@ -55,6 +55,7 @@ void main() {
       page: 1,
       totalPages: 1,
       employees: [tEmployee],
+      totalEmployees: 1,
     );
 
     test('getEmployees should return EmployeeData from the data source',

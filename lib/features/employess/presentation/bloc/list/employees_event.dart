@@ -46,3 +46,9 @@ class EmployeeUpdated extends EmployeesEvent {
 
   const EmployeeUpdated(this.employee);
 }
+
+class GenerateFakeEmployees extends EmployeesEvent {
+  final int numberOfEmployees;
+
+  const GenerateFakeEmployees(this.numberOfEmployees);
+}

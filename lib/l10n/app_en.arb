@@ -79,5 +79,22 @@
   "errorLoadingEmployeesMessage": "Error loading employees. Press retry to load again.",
   "registrationDate": "Registration date",
   "editionDate": "Edition date",
-  "idNumberInUse": "The ID number is already in use"
+  "idNumberInUse": "The ID number is already in use",
+  "generateRandomEmployees": "Generate random employees - For testing",
+  "numberOfEmployees": "Number of employees",
+  "cancel": "Cancel",
+  "generate": "Generate",
+  "loadedEmployees": "Loaded {loaded} of {total} employees",
+  "@loadedEmployees": {
+    "placeholders": {
+      "loaded": {
+        "type": "String",
+        "example": "10"
+      },
+      "total": {
+        "type": "String",
+        "example": "100"
+      }
+    }
+  }
 }

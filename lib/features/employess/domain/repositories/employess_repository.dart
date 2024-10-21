@@ -13,4 +13,5 @@ abstract class EmployeesRepository {
   });
   Future<void> deleteEmployee(String employeeId);
   Future<void> updateEmployee(Employee employee);
+  Future<void> generateFakeEmployees(List<Employee> employees);
 }

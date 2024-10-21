@@ -79,6 +79,24 @@
   "errorLoadingEmployeesMessage": "Error al cargar empleados. Presiona reintentar para cargar nuevamente.",
   "registrationDate": "Fecha de registro",
   "editionDate": "Fecha de edición",
-  "idNumberInUse": "El número de identificación ya está en uso"
+  "idNumberInUse": "El número de identificación ya está en uso",
+  "generateRandomEmployees": "Genera empleados aleatorios - Para pruebas",
+  "numberOfEmployees": "Número de empleados",
+  "cancel": "Cancelar",
+  "generate": "Generar",
+  "loadedEmployees": "Cargados {loaded} de {total} empleados",
+  "@loadedEmployees": {
+    "placeholders": {
+      "loaded": {
+        "type": "String",
+        "example": "10"
+      },
+      "total": {
+        "type": "String",
+        "example": "100"
+      }
+    }
+  }
+  
 
 }

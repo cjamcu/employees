@@ -80,3 +80,9 @@ class InitializeEditForm extends EmployeeFormEvent {
 class InitializeCreateForm extends EmployeeFormEvent {
   const InitializeCreateForm();
 }
+
+class GenerateFakeEmployees extends EmployeeFormEvent {
+  final int numberOfEmployees;
+
+  const GenerateFakeEmployees(this.numberOfEmployees);
+}

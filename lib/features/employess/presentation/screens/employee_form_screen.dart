@@ -31,6 +31,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
   final _firstSurnameController = TextEditingController();
   final _secondSurnameController = TextEditingController();
   final _idNumberController = TextEditingController();
+  final _numberOfEmployeesController = TextEditingController();
 
   @override
   void initState() {
@@ -60,8 +61,9 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
-                title: Text(
-                    widget.isEditing ? l10n.editEmployee : l10n.newEmployee)),
+              title:
+                  Text(widget.isEditing ? l10n.editEmployee : l10n.newEmployee),
+            ),
             body: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -95,6 +97,10 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
                         onPressed: () => _submitForm(
                           context,
                           state,
+                          l10n,
+                        ),
+                        onLongPress: () => _showDialogRandomFakeEmployees(
+                          context,
                           l10n,
                         ),
                       ),
@@ -283,6 +289,44 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.pleaseCompleteAllFields)),
       );
+    }
+  }
+
+  _showDialogRandomFakeEmployees(
+      BuildContext context, AppLocalizations l10n) async {
+    final numberOfEmployees = await showModalBottomSheet<int>(
+      context: context,
+      builder: (context) => Container(
+        height: MediaQuery.of(context).size.height * 0.26,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text(l10n.generateRandomEmployees,
+                style: Theme.of(context).textTheme.titleMedium),
+            CustomTextField(
+              controller: _numberOfEmployeesController,
+              label: l10n.numberOfEmployees,
+              keyboardType: TextInputType.number,
+              validator: (value) => value!.isEmpty ? l10n.requiredField : null,
+            ),
+            PrimaryButton(
+              text: l10n.generate,
+              onPressed: () => Navigator.pop(
+                  context, int.parse(_numberOfEmployeesController.text)),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, null),
+              child: Text(l10n.cancel),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (numberOfEmployees != null) {
+      context
+          .read<EmployeeFormBloc>()
+          .add(GenerateFakeEmployees(numberOfEmployees));
     }
   }
 }
