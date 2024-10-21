@@ -10,6 +10,7 @@ class EmployeeList extends StatefulWidget {
   final Function(Employee) onDelete;
   final EmployeeData employeeData;
   final bool isLoadingMore;
+  final Function(Employee) onEdit;
 
   const EmployeeList({
     super.key,
@@ -17,6 +18,7 @@ class EmployeeList extends StatefulWidget {
     required this.onDelete,
     required this.employeeData,
     required this.isLoadingMore,
+    required this.onEdit,
   });
 
   @override
@@ -61,6 +63,7 @@ class _EmployeeListState extends State<EmployeeList> {
         return EmployeeCard(
           employee: employee,
           onDelete: widget.onDelete,
+          onEdit: widget.onEdit,
         );
       },
     );

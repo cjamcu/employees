@@ -6,6 +6,7 @@ class PhotoSection extends StatelessWidget {
   final VoidCallback onTakePhoto;
   final VoidCallback onRemovePhoto;
   final String label;
+  final String? photoUrl;
 
   const PhotoSection({
     super.key,
@@ -13,6 +14,7 @@ class PhotoSection extends StatelessWidget {
     required this.onTakePhoto,
     required this.onRemovePhoto,
     required this.label,
+    this.photoUrl,
   });
 
   @override
@@ -27,13 +29,15 @@ class PhotoSection extends StatelessWidget {
               color: Colors.grey, width: 2, style: BorderStyle.solid),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: photoFile != null
+        child: photoFile != null || (photoUrl != null && photoUrl != '')
             ? Stack(
                 fit: StackFit.expand,
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.file(photoFile!, fit: BoxFit.cover),
+                    child: photoFile == null
+                        ? Image.network(photoUrl!, fit: BoxFit.cover)
+                        : Image.file(photoFile!, fit: BoxFit.cover),
                   ),
                   Positioned(
                     top: 5,

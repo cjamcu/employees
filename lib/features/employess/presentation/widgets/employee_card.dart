@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -6,11 +7,13 @@ import '../../domain/entities/employee.dart';
 class EmployeeCard extends StatelessWidget {
   final Employee employee;
   final Function(Employee) onDelete;
+  final Function(Employee) onEdit;
 
   const EmployeeCard({
     super.key,
     required this.employee,
     required this.onDelete,
+    required this.onEdit,
   });
 
   @override
@@ -20,7 +23,9 @@ class EmployeeCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
       child: ExpansionTile(
         leading: CircleAvatar(
-          backgroundImage: NetworkImage(employee.photoUrl),
+          backgroundImage: CachedNetworkImageProvider(
+            employee.photoUrl,
+          ),
         ),
         title: Text(employee.fullName),
         subtitle: Text(employee.email),
@@ -35,15 +40,21 @@ class EmployeeCard extends StatelessWidget {
                 Text('${l10n.area}: ${employee.areaHumanReadable}'),
                 Text(
                     '${l10n.entryDate}: ${DateFormat('dd/MM/yyyy').format(employee.entryDate)}'),
-                Text('${l10n.status}: ${employee.isActive ? l10n.active : l10n.inactive}'),
-                const SizedBox(height: 8),
-                Row(  
+                Text(
+                    '${l10n.status}: ${employee.isActive ? l10n.active : l10n.inactive}'),
+                if (employee.registrationDate != null)
+                  Text(
+                      '${l10n.registrationDate}: ${DateFormat('dd/MM/yyyy').format(employee.registrationDate!)}'),
+                if (employee.editionDate != null)
+                  Text(
+                      '${l10n.editionDate}: ${DateFormat('dd/MM/yyyy').format(employee.editionDate!)}'),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
                       icon: const Icon(Icons.edit),
                       onPressed: () {
-                        // TODO: Implementar la edición del empleado
+                        onEdit(employee);
                       },
                     ),
                     IconButton(

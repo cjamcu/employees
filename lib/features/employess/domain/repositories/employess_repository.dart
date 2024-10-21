@@ -7,4 +7,5 @@ abstract class EmployeesRepository {
   Future<void> addEmployee(Employee employee);
   Future<bool> isEmailInUse(String email);
   Future<void> deleteEmployee(String employeeId);
+  Future<void> updateEmployee(Employee employee);
 }

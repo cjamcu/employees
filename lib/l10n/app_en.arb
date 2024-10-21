@@ -63,12 +63,20 @@
   "active": "Active",
   "inactive": "Inactive",
   "country": "Country",
-
   "email": "Email",
   "noEmployeesFound": "No employees found.",
   "loading": "Loading...",
   "onlyUppercaseLetters": "Only uppercase letters are allowed",
   "noAccents": "Accents are not allowed",
   "onlyLettersAndSpaces": "Only letters and spaces are allowed",
-  "onlyLettersNumbersAndHyphens": "Only letters, numbers, and hyphens are allowed"
+  "onlyLettersNumbersAndHyphens": "Only letters, numbers, and hyphens are allowed",
+  "editEmployee": "Edit employee",
+  "updateEmployee": "Update employee",
+  "updatingEmployee": "Updating employee...",
+  "employeeUpdatedSuccess": "Employee updated successfully",
+  "employeeUpdateError": "Error updating employee",
+  "updatePhoto": "Update photo",
+  "errorLoadingEmployeesMessage": "Error loading employees. Press retry to load again.",
+  "registrationDate": "Registration date",
+  "editionDate": "Edition date"
 }

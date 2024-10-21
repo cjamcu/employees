@@ -10,7 +10,7 @@ class EmployeeFormState extends Equatable {
 }
 
 class EmployeeFormInitial extends EmployeeFormState {
-  const EmployeeFormInitial() : super(data: const Data());
+  const EmployeeFormInitial({Data? data}) : super(data: data ?? const Data());
 }
 
 class EmployeeFormSubmitting extends EmployeeFormState {

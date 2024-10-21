@@ -20,6 +20,8 @@ class EmployeeFormBloc extends Bloc<EmployeeFormEvent, EmployeeFormState> {
     required this.fileUploadRepository,
     required this.generateEmployeeEmail,
   }) : super(const EmployeeFormInitial()) {
+    on<InitializeEditForm>(_onInitializeEditForm);
+    on<InitializeCreateForm>(_onInitializeCreateForm);
     on<EmploymentCountryChanged>(_onEmploymentCountryChanged);
     on<IdTypeChanged>(_onIdTypeChanged);
     on<AreaChanged>(_onAreaChanged);
@@ -29,10 +31,26 @@ class EmployeeFormBloc extends Bloc<EmployeeFormEvent, EmployeeFormState> {
     on<SubmitForm>(_onSubmitForm);
   }
 
+  void _onInitializeEditForm(
+      InitializeEditForm event, Emitter<EmployeeFormState> emit) {
+    emit(EmployeeFormInitial(
+        data: Data(
+      employmentCountry: event.employee.employmentCountry,
+      idType: event.employee.idType,
+      area: event.employee.area,
+      entryDate: event.employee.entryDate,
+    )));
+  }
+
   void _onEmploymentCountryChanged(
       EmploymentCountryChanged event, Emitter<EmployeeFormState> emit) {
     emit(DataUpdatedState(
         data: state.data?.copyWith(employmentCountry: event.country)));
+  }
+
+  void _onInitializeCreateForm(
+      InitializeCreateForm event, Emitter<EmployeeFormState> emit) {
+    emit(const EmployeeFormInitial());
   }
 
   void _onIdTypeChanged(IdTypeChanged event, Emitter<EmployeeFormState> emit) {
@@ -60,51 +78,48 @@ class EmployeeFormBloc extends Bloc<EmployeeFormEvent, EmployeeFormState> {
   void _onSubmitForm(SubmitForm event, Emitter<EmployeeFormState> emit) async {
     emit(EmployeeFormSubmitting(data: state.data));
     try {
-      final email = await generateEmployeeEmail.execute(
-        firstName: event.firstName,
-        lastName: event.firstSurname,
-        employmentCountry: state.data!.employmentCountry!,
+      final generateEmail =
+          (event.employee.firstName != event.oldEmployee?.firstName ||
+              event.employee.employmentCountry !=
+                  event.oldEmployee?.employmentCountry ||
+              event.employee.firstSurname != event.oldEmployee?.firstSurname);
+
+      final email = generateEmail
+          ? await generateEmployeeEmail.execute(
+              firstName: event.employee.firstName,
+              lastName: event.employee.firstSurname,
+              employmentCountry: event.employee.employmentCountry,
+            )
+          : event.employee.email;
+
+      String? photoUrl;
+
+      if (state.data!.photoFile != null) {
+        try {
+          photoUrl =
+              await fileUploadRepository.uploadImage(state.data!.photoFile!);
+        } catch (e) {
+          emit(ImageUploadFailure(data: state.data));
+          return;
+        }
+      }
+      final finalEmployee = event.employee.copyWith(
+        photoUrl: photoUrl ?? event.employee.photoUrl,
+        email: email,
+        id: event.isEditing ? event.employee.id : const Uuid().v4(),
       );
-
-      String photoUrl = '';
-
-      try {
-        photoUrl =
-            await fileUploadRepository.uploadImage(state.data!.photoFile!);
-      } catch (e) {
-        emit(ImageUploadFailure(data: state.data));
-        return;
+      if (event.isEditing) {
+        await employeesRepository.updateEmployee(finalEmployee);
+      } else {
+        await employeesRepository.addEmployee(finalEmployee);
       }
 
-      final employee = Employee(
-        id: _generateUniqueId(),
-        firstName: event.firstName,
-        otherNames: event.otherNames,
-        employmentCountry: state.data!.employmentCountry!,
-        registrationDate: DateTime.now(),
-        isActive: true,
-        firstSurname: event.firstSurname,
-        secondSurname: event.secondSurname,
-        email: email,
-        photoUrl: photoUrl,
-        idType: state.data!.idType!,
-        idNumber: event.idNumber,
-        entryDate: state.data!.entryDate!,
-        area: state.data!.area!,
-      );
-
-      await employeesRepository.addEmployee(employee);
       emit(EmployeeFormSubmissionSuccess(
         data: const Data(),
-        employee: employee,
+        employee: finalEmployee,
       ));
     } catch (e) {
       emit(EmployeeFormSubmissionFailure(data: state.data));
     }
-  }
-
-  // Generate a unique id for the employee
-  String _generateUniqueId() {
-    return const Uuid().v4();
   }
 }

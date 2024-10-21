@@ -57,21 +57,26 @@ class PhotoRemoved extends EmployeeFormEvent {
 }
 
 class SubmitForm extends EmployeeFormEvent {
-  final String firstName;
-  final String? otherNames;
-  final String firstSurname;
-  final String secondSurname;
-
-  final String idNumber;
+  final Employee employee;
+  final Employee? oldEmployee;
+  final bool isEditing;
 
   const SubmitForm({
-    required this.firstName,
-    required this.firstSurname,
-    required this.secondSurname,
-    required this.otherNames,
-    required this.idNumber,
+    this.isEditing = false,
+    required this.employee,
+    this.oldEmployee,
   });
 
   @override
   List<Object?> get props => [];
+}
+
+class InitializeEditForm extends EmployeeFormEvent {
+  final Employee employee;
+
+  const InitializeEditForm(this.employee);
+}
+
+class InitializeCreateForm extends EmployeeFormEvent {
+  const InitializeCreateForm();
 }

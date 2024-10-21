@@ -1,4 +1,6 @@
-class Employee {
+import 'package:equatable/equatable.dart';
+
+class Employee extends Equatable {
   final String id;
   final String firstSurname;
   final String secondSurname;
@@ -11,8 +13,9 @@ class Employee {
   final DateTime entryDate;
   final int area;
   final bool isActive;
-  final DateTime registrationDate;
+  final DateTime? registrationDate;
   final String photoUrl;
+  final DateTime? editionDate;
 
   String get fullName =>
       '$firstName ${otherNames ?? ''} $firstSurname $secondSurname';
@@ -81,5 +84,60 @@ class Employee {
     this.isActive = true,
     required this.registrationDate,
     required this.photoUrl,
+    this.editionDate,
   });
+
+  Employee copyWith({
+    String? id,
+    String? photoUrl,
+    DateTime? editionDate,
+    int? area,
+    bool? isActive,
+    DateTime? entryDate,
+    DateTime? registrationDate,
+    String? firstSurname,
+    String? secondSurname,
+    String? firstName,
+    String? otherNames,
+    int? idType,
+    String? idNumber,
+    String? email,
+    String? employmentCountry,
+  }) =>
+      Employee(
+        id: id ?? this.id,
+        photoUrl: photoUrl ?? this.photoUrl,
+        editionDate: editionDate ?? this.editionDate,
+        area: area ?? this.area,
+        isActive: isActive ?? this.isActive,
+        entryDate: entryDate ?? this.entryDate,
+        registrationDate: registrationDate ?? this.registrationDate,
+        firstSurname: firstSurname ?? this.firstSurname,
+        secondSurname: secondSurname ?? this.secondSurname,
+        firstName: firstName ?? this.firstName,
+        otherNames: otherNames ?? this.otherNames,
+        employmentCountry: employmentCountry ?? this.employmentCountry,
+        idType: idType ?? this.idType,
+        idNumber: idNumber ?? this.idNumber,
+        email: email ?? this.email,
+      );
+
+  @override
+  List<Object?> get props => [
+        id,
+        firstSurname,
+        secondSurname,
+        firstName,
+        otherNames,
+        employmentCountry,
+        idType,
+        idNumber,
+        email,
+        entryDate,
+        area,
+        isActive,
+        registrationDate,
+        photoUrl,
+        editionDate,
+      ];
 }

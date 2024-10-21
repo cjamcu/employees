@@ -39,4 +39,10 @@ class EmployeesRepositoryImpl extends EmployeesRepository {
   Future<void> deleteEmployee(String employeeId) async {
     await employeesRemoteDataSource.deleteEmployee(employeeId);
   }
+
+  @override
+  Future<void> updateEmployee(Employee employee) async {
+    return await employeesRemoteDataSource
+        .updateEmployee(EmployeeModel.fromEntity(employee));
+  }
 }

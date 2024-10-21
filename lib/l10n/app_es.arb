@@ -69,6 +69,15 @@
   "onlyUppercaseLetters": "Solo se permiten letras mayúsculas",
   "noAccents": "No se permiten acentos",
   "onlyLettersAndSpaces": "Solo se permiten letras y espacios",
-  "onlyLettersNumbersAndHyphens": "Solo se permiten letras, números y guiones"
-  
+  "onlyLettersNumbersAndHyphens": "Solo se permiten letras, números y guiones",
+  "editEmployee": "Editar empleado",
+  "updateEmployee": "Actualizar empleado",
+  "updatingEmployee": "Actualizando empleado...",
+  "employeeUpdatedSuccess": "Empleado actualizado con éxito",
+  "employeeUpdateError": "Error al actualizar el empleado",
+  "updatePhoto": "Actualizar foto",
+  "errorLoadingEmployeesMessage": "Error al cargar empleados. Presiona reintentar para cargar nuevamente.",
+  "registrationDate": "Fecha de registro",
+  "editionDate": "Fecha de edición"
+
 }

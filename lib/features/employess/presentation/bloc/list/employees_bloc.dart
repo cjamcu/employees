@@ -22,6 +22,7 @@ class EmployeesBloc extends Bloc<EmployeesEvent, EmployeesState> {
     on<ResetFilter>(_onResetFilter);
     on<EmployeeAdded>(_onEmployeeAdded);
     on<EmployeeDeleted>(_onEmployeeDeleted);
+    on<EmployeeUpdated>(_onEmployeeUpdated);
   }
 
   void _onLoadEmployees(
@@ -136,5 +137,20 @@ class EmployeesBloc extends Bloc<EmployeesEvent, EmployeesState> {
         filter: state.filter,
       ));
     }
+  }
+
+  FutureOr<void> _onEmployeeUpdated(
+      EmployeeUpdated event, Emitter<EmployeesState> emit) async {
+    final currentState = state as EmployeesLoaded;
+    final updatedEmployees = currentState.employeeData.employees
+        .map((employee) =>
+            employee.id == event.employee.id ? event.employee : employee)
+        .toList();
+
+    emit(EmployeesLoaded(
+      employeeData:
+          currentState.employeeData.copyWith(employees: updatedEmployees),
+      filter: currentState.filter,
+    ));
   }
 }

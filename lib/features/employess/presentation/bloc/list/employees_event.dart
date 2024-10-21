@@ -40,3 +40,9 @@ class EmployeeDeleted extends EmployeesEvent {
 
   const EmployeeDeleted(this.employee);
 }
+
+class EmployeeUpdated extends EmployeesEvent {
+  final Employee employee;
+
+  const EmployeeUpdated(this.employee);
+}

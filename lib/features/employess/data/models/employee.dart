@@ -16,6 +16,7 @@ class EmployeeModel extends Employee {
     super.isActive = true,
     required super.registrationDate,
     required super.photoUrl,
+    super.editionDate,
   });
   factory EmployeeModel.fromJson(Map<String, dynamic> json, String id) {
     return EmployeeModel(
@@ -33,6 +34,7 @@ class EmployeeModel extends Employee {
       isActive: json['isActive'],
       registrationDate: json['registrationDate'].toDate(),
       photoUrl: json['photoUrl'],
+      editionDate: json['editionDate']?.toDate(),
     );
   }
 
@@ -51,6 +53,7 @@ class EmployeeModel extends Employee {
       email: employee.email,
       registrationDate: employee.registrationDate,
       photoUrl: employee.photoUrl,
+      editionDate: employee.editionDate,
     );
   }
 
@@ -70,10 +73,12 @@ class EmployeeModel extends Employee {
       'isActive': isActive,
       'registrationDate': registrationDate,
       'photoUrl': photoUrl,
+      'editionDate': editionDate,
     };
   }
 
-  copyWith({
+  @override
+  EmployeeModel copyWith({
     String? id,
     String? firstSurname,
     String? secondSurname,
@@ -88,6 +93,7 @@ class EmployeeModel extends Employee {
     bool? isActive,
     DateTime? registrationDate,
     String? photoUrl,
+    DateTime? editionDate,
   }) {
     return EmployeeModel(
       id: id ?? this.id,
@@ -104,6 +110,7 @@ class EmployeeModel extends Employee {
       isActive: isActive ?? this.isActive,
       registrationDate: registrationDate ?? this.registrationDate,
       photoUrl: photoUrl ?? this.photoUrl,
+      editionDate: editionDate ?? this.editionDate,
     );
   }
 }

@@ -26,6 +26,7 @@ void main() {
       area: 0,
       registrationDate: DateTime(2023, 1, 1),
       photoUrl: 'http://example.com/photo.jpg',
+      editionDate: DateTime(2023, 1, 1),
     );
 
     test('getEmployees should return EmployeeData', () async {

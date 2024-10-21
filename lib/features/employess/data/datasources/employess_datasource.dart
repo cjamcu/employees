@@ -9,6 +9,7 @@ abstract class EmployeesDataSource {
   Future<void> addEmployee(EmployeeModel employee);
   Future<bool> isEmailInUse(String email);
   Future<void> deleteEmployee(String employeeId);
+  Future<void> updateEmployee(EmployeeModel employee);
 }
 
 class EmployeesDataSourceImpl implements EmployeesDataSource {
@@ -104,5 +105,12 @@ class EmployeesDataSourceImpl implements EmployeesDataSource {
   @override
   Future<void> deleteEmployee(String employeeId) async {
     await _firestore.collection('employees').doc(employeeId).delete();
+  }
+
+  @override
+  Future<void> updateEmployee(EmployeeModel employee) async {
+    await _firestore.collection('employees').doc(employee.id).update(
+          employee.toJson(),
+        );
   }
 }

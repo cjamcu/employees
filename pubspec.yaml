@@ -51,6 +51,7 @@ dependencies:
   firebase_storage_mocks: ^0.7.0
   flutter_localizations:
     sdk: flutter
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
