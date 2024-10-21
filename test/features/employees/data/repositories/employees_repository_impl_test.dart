@@ -106,5 +106,47 @@ void main() {
 
       verify(() => mockDataSource.deleteEmployee('1')).called(1);
     });
+
+    test('updateEmployee should call the data source', () async {
+      when(() => mockDataSource.updateEmployee(any())).thenAnswer((_) async {});
+
+      await repository.updateEmployee(tEmployee);
+
+      verify(() => mockDataSource.updateEmployee(any())).called(1);
+    });
+
+    test('isIdNumberInUse should return boolean from the data source',
+        () async {
+      when(() => mockDataSource.isIdNumberInUse(
+            idType: any(named: 'idType'),
+            idNumber: any(named: 'idNumber'),
+            excludeEmployeeId: any(named: 'excludeEmployeeId'),
+          )).thenAnswer((_) async => true);
+
+      final result = await repository.isIdNumberInUse(
+        idType: 0,
+        idNumber: '123456',
+        excludeEmployeeId: null,
+      );
+
+      expect(result, isTrue);
+    });
+
+    test('isIdNumberInUse should return false if id number is not in use',
+        () async {
+      when(() => mockDataSource.isIdNumberInUse(
+            idType: any(named: 'idType'),
+            idNumber: any(named: 'idNumber'),
+            excludeEmployeeId: any(named: 'excludeEmployeeId'),
+          )).thenAnswer((_) async => false);
+
+      final result = await repository.isIdNumberInUse(
+        idType: 0,
+        idNumber: '123456',
+        excludeEmployeeId: '1',
+      );
+
+      expect(result, isFalse);
+    });
   });
 }

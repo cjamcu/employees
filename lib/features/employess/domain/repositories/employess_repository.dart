@@ -6,6 +6,11 @@ abstract class EmployeesRepository {
   Future<EmployeeData> getEmployeesWithFilter(Map<String, dynamic> filters);
   Future<void> addEmployee(Employee employee);
   Future<bool> isEmailInUse(String email);
+  Future<bool> isIdNumberInUse({
+    required String idNumber,
+    required int idType,
+    required String? excludeEmployeeId,
+  });
   Future<void> deleteEmployee(String employeeId);
   Future<void> updateEmployee(Employee employee);
 }

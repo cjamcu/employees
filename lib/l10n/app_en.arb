@@ -78,5 +78,6 @@
   "updatePhoto": "Update photo",
   "errorLoadingEmployeesMessage": "Error loading employees. Press retry to load again.",
   "registrationDate": "Registration date",
-  "editionDate": "Edition date"
+  "editionDate": "Edition date",
+  "idNumberInUse": "The ID number is already in use"
 }

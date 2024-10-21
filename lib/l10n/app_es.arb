@@ -78,6 +78,7 @@
   "updatePhoto": "Actualizar foto",
   "errorLoadingEmployeesMessage": "Error al cargar empleados. Presiona reintentar para cargar nuevamente.",
   "registrationDate": "Fecha de registro",
-  "editionDate": "Fecha de edición"
+  "editionDate": "Fecha de edición",
+  "idNumberInUse": "El número de identificación ya está en uso"
 
 }

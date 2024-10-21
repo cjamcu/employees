@@ -10,6 +10,11 @@ abstract class EmployeesDataSource {
   Future<bool> isEmailInUse(String email);
   Future<void> deleteEmployee(String employeeId);
   Future<void> updateEmployee(EmployeeModel employee);
+  Future<bool> isIdNumberInUse({
+    required int idType,
+    required String idNumber,
+    required String? excludeEmployeeId,
+  });
 }
 
 class EmployeesDataSourceImpl implements EmployeesDataSource {
@@ -112,5 +117,25 @@ class EmployeesDataSourceImpl implements EmployeesDataSource {
     await _firestore.collection('employees').doc(employee.id).update(
           employee.toJson(),
         );
+  }
+
+  @override
+  Future<bool> isIdNumberInUse({
+    required int idType,
+    required String idNumber,
+    required String? excludeEmployeeId,
+  }) async {
+    Query query = _firestore
+        .collection('employees')
+        .where('idType', isEqualTo: idType)
+        .where('idNumber', isEqualTo: idNumber);
+
+    if (excludeEmployeeId != null) {
+      query =
+          query.where(FieldPath.documentId, isNotEqualTo: excludeEmployeeId);
+    }
+
+    final result = await query.get();
+    return result.docs.isNotEmpty;
   }
 }

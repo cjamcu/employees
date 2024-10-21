@@ -104,3 +104,7 @@ class Data extends Equatable {
         photoFile,
       ];
 }
+
+class EmployeeFormIdNumberInUse extends EmployeeFormState {
+  const EmployeeFormIdNumberInUse({required super.data});
+}

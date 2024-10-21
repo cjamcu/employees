@@ -45,4 +45,17 @@ class EmployeesRepositoryImpl extends EmployeesRepository {
     return await employeesRemoteDataSource
         .updateEmployee(EmployeeModel.fromEntity(employee));
   }
+
+  @override
+  Future<bool> isIdNumberInUse({
+    required int idType,
+    required String idNumber,
+    required String? excludeEmployeeId,
+  }) async {
+    return await employeesRemoteDataSource.isIdNumberInUse(
+      idType: idType,
+      idNumber: idNumber,
+      excludeEmployeeId: excludeEmployeeId,
+    );
+  }
 }

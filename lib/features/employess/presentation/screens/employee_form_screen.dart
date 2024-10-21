@@ -128,6 +128,8 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
               ? l10n.employeeUpdateError
               : l10n.employeeRegistrationError,
           Colors.red);
+    } else if (state is EmployeeFormIdNumberInUse) {
+      _showSnackBar(context, l10n.idNumberInUse, Colors.red);
     }
   }
 

@@ -12,23 +12,23 @@ void main() {
     dataSource = EmployeesDataSourceImpl(fakeFirestore);
   });
 
-  group('EmployeesDataSourceImpl', () {
-    final tEmployeeModel = EmployeeModel(
-      id: '1',
-      firstName: 'John',
-      firstSurname: 'Doe',
-      secondSurname: 'Smith',
-      email: 'john@example.com',
-      employmentCountry: 'US',
-      idType: 0,
-      idNumber: '123456',
-      entryDate: DateTime(2023, 1, 1),
-      area: 0,
-      registrationDate: DateTime(2023, 1, 1),
-      photoUrl: 'http://example.com/photo.jpg',
-      editionDate: DateTime(2023, 1, 1),
-    );
+  final tEmployeeModel = EmployeeModel(
+    id: '1',
+    firstName: 'John',
+    firstSurname: 'Doe',
+    secondSurname: 'Smith',
+    email: 'john@example.com',
+    employmentCountry: 'US',
+    idType: 0,
+    idNumber: '123456',
+    entryDate: DateTime(2023, 1, 1),
+    area: 0,
+    registrationDate: DateTime(2023, 1, 1),
+    photoUrl: 'http://example.com/photo.jpg',
+    editionDate: DateTime(2023, 1, 1),
+  );
 
+  group('EmployeesDataSourceImpl', () {
     test('getEmployees should return EmployeeData', () async {
       await fakeFirestore.collection('employees').add(tEmployeeModel.toJson());
 
@@ -107,5 +107,42 @@ void main() {
               .every((e2) => !result1.employees.any((e1) => e1.id == e2.id)),
           isTrue);
     });
+  });
+
+  test('updateEmployee should update an employee in Firestore', () async {
+    await fakeFirestore
+        .collection('employees')
+        .doc('1')
+        .set(tEmployeeModel.toJson());
+
+    final updatedEmployee = tEmployeeModel.copyWith(firstName: 'Juan');
+
+    await dataSource.updateEmployee(updatedEmployee);
+
+    final snapshot = await fakeFirestore.collection('employees').doc('1').get();
+    expect(snapshot.data()?['firstName'], 'Juan');
+  });
+
+  test('isIdNumberInUse should return true if id number is in use', () async {
+    await fakeFirestore.collection('employees').add(tEmployeeModel.toJson());
+
+    final result = await dataSource.isIdNumberInUse(
+      idType: 0,
+      idNumber: '123456',
+      excludeEmployeeId: null,
+    );
+
+    expect(result, isTrue);
+  });
+
+  test('isIdNumberInUse should return false if id number is not in use',
+      () async {
+    final result = await dataSource.isIdNumberInUse(
+      idType: 0,
+      idNumber: '123456',
+      excludeEmployeeId: '1',
+    );
+
+    expect(result, isFalse);
   });
 }

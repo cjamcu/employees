@@ -78,6 +78,17 @@ class EmployeeFormBloc extends Bloc<EmployeeFormEvent, EmployeeFormState> {
   void _onSubmitForm(SubmitForm event, Emitter<EmployeeFormState> emit) async {
     emit(EmployeeFormSubmitting(data: state.data));
     try {
+      final isIdInUse = await employeesRepository.isIdNumberInUse(
+        idType: event.employee.idType,
+        idNumber: event.employee.idNumber,
+        excludeEmployeeId: event.isEditing ? event.employee.id : null,
+      );
+
+      if (isIdInUse) {
+        emit(EmployeeFormIdNumberInUse(data: state.data));
+        return;
+      }
+
       final generateEmail =
           (event.employee.firstName != event.oldEmployee?.firstName ||
               event.employee.employmentCountry !=

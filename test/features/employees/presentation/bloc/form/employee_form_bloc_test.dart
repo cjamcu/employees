@@ -124,6 +124,11 @@ void main() {
       build: () {
         when(() => mockEmployeesRepository.isEmailInUse(any()))
             .thenAnswer((_) async => false);
+        when(() => mockEmployeesRepository.isIdNumberInUse(
+                idType: any(named: 'idType'),
+                idNumber: any(named: 'idNumber'),
+                excludeEmployeeId: any(named: 'excludeEmployeeId')))
+            .thenAnswer((_) async => false);
         when(() => mockFilesRepository.uploadImage(any()))
             .thenAnswer((_) async => 'http://example.com/photo.jpg');
         when(() => mockEmployeesRepository.addEmployee(any()))
@@ -157,6 +162,11 @@ void main() {
       build: () {
         when(() => mockEmployeesRepository.isEmailInUse(any()))
             .thenAnswer((_) async => false);
+        when(() => mockEmployeesRepository.isIdNumberInUse(
+                idType: any(named: 'idType'),
+                idNumber: any(named: 'idNumber'),
+                excludeEmployeeId: any(named: 'excludeEmployeeId')))
+            .thenAnswer((_) async => false);
         when(() => mockFilesRepository.uploadImage(any()))
             .thenThrow(Exception('Upload failed'));
         return employeeFormBloc;
@@ -180,6 +190,11 @@ void main() {
       'emits [EmployeeFormSubmitting, EmployeeFormSubmissionFailure] when SubmitForm is added and addEmployee fails',
       build: () {
         when(() => mockEmployeesRepository.isEmailInUse(any()))
+            .thenAnswer((_) async => false);
+        when(() => mockEmployeesRepository.isIdNumberInUse(
+                idType: any(named: 'idType'),
+                idNumber: any(named: 'idNumber'),
+                excludeEmployeeId: any(named: 'excludeEmployeeId')))
             .thenAnswer((_) async => false);
         when(() => mockFilesRepository.uploadImage(any()))
             .thenAnswer((_) async => 'http://example.com/photo.jpg');
@@ -206,6 +221,11 @@ void main() {
       'emits [EmployeeFormSubmitting, EmployeeFormSubmissionSuccess] when updateEmployee is successful',
       build: () {
         when(() => mockEmployeesRepository.isEmailInUse(any()))
+            .thenAnswer((_) async => false);
+        when(() => mockEmployeesRepository.isIdNumberInUse(
+                idType: any(named: 'idType'),
+                idNumber: any(named: 'idNumber'),
+                excludeEmployeeId: any(named: 'excludeEmployeeId')))
             .thenAnswer((_) async => false);
         when(() => mockEmployeesRepository.updateEmployee(any()))
             .thenAnswer((_) async => {});
@@ -244,6 +264,11 @@ void main() {
       'emits [EmployeeFormSubmitting, ImageUploadFailure] when image upload fails during update',
       build: () {
         when(() => mockEmployeesRepository.isEmailInUse(any()))
+            .thenAnswer((_) async => false);
+        when(() => mockEmployeesRepository.isIdNumberInUse(
+                idType: any(named: 'idType'),
+                idNumber: any(named: 'idNumber'),
+                excludeEmployeeId: any(named: 'excludeEmployeeId')))
             .thenAnswer((_) async => false);
         when(() => mockFilesRepository.uploadImage(any()))
             .thenThrow(Exception('Upload failed'));
@@ -285,6 +310,39 @@ void main() {
         isA<EmployeeFormSubmitting>(),
         isA<EmployeeFormSubmissionFailure>(),
       ],
+    );
+
+    blocTest<EmployeeFormBloc, EmployeeFormState>(
+      'emits [EmployeeFormSubmitting, EmployeeFormIdNumberInUse] when ID number is already in use',
+      build: () {
+        when(() => mockEmployeesRepository.isIdNumberInUse(
+              idType: any(named: 'idType'),
+              idNumber: any(named: 'idNumber'),
+              excludeEmployeeId: any(named: 'excludeEmployeeId'),
+            )).thenAnswer((_) async => true);
+        return employeeFormBloc;
+      },
+      seed: () => DataUpdatedState(
+        data: Data(
+          employmentCountry: 'CO',
+          idType: 1,
+          area: 2,
+          entryDate: DateTime(2023, 1, 1),
+          photoFile: MockFile(),
+        ),
+      ),
+      act: (bloc) => bloc.add(SubmitForm(employee: employee)),
+      expect: () => [
+        isA<EmployeeFormSubmitting>(),
+        isA<EmployeeFormIdNumberInUse>(),
+      ],
+      verify: (_) {
+        verify(() => mockEmployeesRepository.isIdNumberInUse(
+              idType: any(named: 'idType'),
+              idNumber: any(named: 'idNumber'),
+              excludeEmployeeId: any(named: 'excludeEmployeeId'),
+            )).called(1);
+      },
     );
   });
 }
