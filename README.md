@@ -50,13 +50,25 @@ lib/
 
 ```yaml
 dependencies:
-  flutter_bloc: ^8.1.3
-  get_it: ^7.6.0
-  cloud_firestore: ^4.8.0
-  firebase_storage: ^11.2.2
-  image_picker: ^0.8.7
+ intl: ^0.19.0
+  bloc: ^8.1.4
   equatable: ^2.0.5
-  intl: ^0.18.0
+  flutter_bloc: ^8.1.6
+  firebase_core: ^3.6.0
+  get_it: ^8.0.0
+  cloud_firestore: ^5.4.4
+  firebase_storage: ^12.3.3
+  image_picker: ^1.1.2
+  uuid: ^4.5.1
+  mocktail: ^1.0.4
+  bloc_test: ^9.1.7
+  fake_cloud_firestore: ^3.0.3
+  firebase_storage_mocks: ^0.7.0
+  cached_network_image: ^3.4.1
+  faker: ^2.2.0
+  talker: ^4.4.1
+  talker_flutter: ^4.4.1
+  talker_bloc_logger: ^4.4.1
 ```
 
 ## 🚀 Configuración y Ejecución
@@ -131,4 +143,18 @@ La aplicación soporta múltiples idiomas:
 - 🇺🇸 Inglés
 
 Los archivos de traducción se encuentran en `lib/l10n/`. Para agregar o modificar traducciones, edita los archivos ARB correspondientes y ejecuta `flutter gen-l10n`.
+
+
+## 📊 Registro (Logging)
+
+Para el sistema de registro (logging) de la aplicación, se ha implementado el paquete Talker. Este robusto sistema de logging se utiliza para:
+
+1. Registrar las operaciones realizadas en los repositorios.
+2. Monitorear las acciones y cambios de estado en los BLoCs.
+
+Además, para facilitar la depuración y el análisis en tiempo real, se ha incorporado una característica especial en la interfaz de usuario:
+
+- 🔍 Un botón dedicado que permite visualizar los registros directamente desde la interfaz de la aplicación.
+
+Esta funcionalidad mejora significativamente la capacidad de diagnóstico y seguimiento del comportamiento de la aplicación durante el desarrollo y en producción.
 
