@@ -1,3 +1,4 @@
+import 'package:employees/features/employess/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -20,13 +21,13 @@ class ErrorView extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            l10n.errorLoadingEmployees,
+            l10n.errorLoadingEmployeesMessage,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
-          ElevatedButton(
+          PrimaryButton(
+            text: l10n.retry,
             onPressed: onRetry,
-            child: Text(l10n.retry),
           ),
         ],
       ),
