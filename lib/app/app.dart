@@ -1,8 +1,10 @@
+import 'package:employees/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:employees/features/employess/presentation/screens/employess_screen.dart';
 import 'package:employees/app/colors.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -11,6 +13,9 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Employees',
+      navigatorObservers: [
+        TalkerRouteObserver(getIt<Talker>()),
+      ],
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         AppLocalizations.delegate,

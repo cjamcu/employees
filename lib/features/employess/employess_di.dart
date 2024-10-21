@@ -31,6 +31,7 @@ class EmployeesDI implements DI {
     getIt.registerLazySingleton<EmployeesRepository>(
       () => EmployeesRepositoryImpl(
         employeesRemoteDataSource: getIt(),
+        talker: getIt(),
       ),
     );
     getIt.registerLazySingleton<EmployeesBloc>(

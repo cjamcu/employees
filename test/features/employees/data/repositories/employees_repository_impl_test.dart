@@ -5,8 +5,11 @@ import 'package:employees/features/employess/data/repositories/employess_reposit
 import 'package:employees/features/employess/domain/entities/employee.dart';
 import 'package:employees/features/employess/domain/entities/employees_data.dart';
 import 'package:employees/features/employess/data/models/employee.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class MockEmployeesDataSource extends Mock implements EmployeesDataSource {}
+
+class TalkerMock extends Mock implements Talker {}
 
 void main() {
   setUpAll(() {
@@ -28,11 +31,16 @@ void main() {
 
   late EmployeesRepositoryImpl repository;
   late MockEmployeesDataSource mockDataSource;
+  late TalkerMock talkerMock;
 
   setUp(() {
     mockDataSource = MockEmployeesDataSource();
-    repository =
-        EmployeesRepositoryImpl(employeesRemoteDataSource: mockDataSource);
+    talkerMock = TalkerMock();
+    
+    repository = EmployeesRepositoryImpl(
+      employeesRemoteDataSource: mockDataSource,
+      talker: talkerMock,
+    );
   });
 
   group('EmployeesRepositoryImpl', () {

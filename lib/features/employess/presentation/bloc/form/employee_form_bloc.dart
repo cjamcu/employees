@@ -172,7 +172,7 @@ class EmployeeFormBloc extends Bloc<EmployeeFormEvent, EmployeeFormState> {
             area: faker.randomGenerator.integer(5) + 1,
             isActive: isActive,
             registrationDate: registrationDate,
-            photoUrl: faker.image.image(width: 100, height: 100),
+            photoUrl: faker.image.loremPicsum(width: 100, height: 100),
           );
         },
       ),

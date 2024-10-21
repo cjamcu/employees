@@ -3,15 +3,20 @@ import 'package:employees/features/employess/data/models/employee.dart';
 import 'package:employees/features/employess/domain/entities/employee.dart';
 import 'package:employees/features/employess/domain/entities/employees_data.dart';
 import 'package:employees/features/employess/domain/repositories/employess_repository.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class EmployeesRepositoryImpl extends EmployeesRepository {
   final EmployeesDataSource employeesRemoteDataSource;
+  final Talker talker;
+
   EmployeesRepositoryImpl({
     required this.employeesRemoteDataSource,
+    required this.talker,
   });
 
   @override
   Future<EmployeeData> getEmployees({int page = 1, int limit = 10}) async {
+    talker.info('Getting employees with page: $page and limit: $limit');
     return await employeesRemoteDataSource.getEmployees(
       page: page,
       limit: limit,
@@ -21,6 +26,7 @@ class EmployeesRepositoryImpl extends EmployeesRepository {
   @override
   Future<EmployeeData> getEmployeesWithFilter(
       Map<String, dynamic> filters) async {
+    talker.info('Getting employees with filters: $filters');
     return await employeesRemoteDataSource.getEmployeesWithFilter(filters);
   }
 
@@ -37,6 +43,7 @@ class EmployeesRepositoryImpl extends EmployeesRepository {
 
   @override
   Future<void> deleteEmployee(String employeeId) async {
+    talker.info('Deleting employee with id: $employeeId');
     await employeesRemoteDataSource.deleteEmployee(employeeId);
   }
 
@@ -52,6 +59,7 @@ class EmployeesRepositoryImpl extends EmployeesRepository {
     required String idNumber,
     required String? excludeEmployeeId,
   }) async {
+    talker.info('Checking if id number: $idNumber is in use');
     return await employeesRemoteDataSource.isIdNumberInUse(
       idType: idType,
       idNumber: idNumber,
@@ -61,6 +69,7 @@ class EmployeesRepositoryImpl extends EmployeesRepository {
 
   @override
   Future<void> generateFakeEmployees(List<Employee> employees) async {
+    talker.info('Generating fake employees');
     for (var employee in employees) {
       await employeesRemoteDataSource
           .addEmployee(EmployeeModel.fromEntity(employee));

@@ -4,6 +4,7 @@ import 'package:employees/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 import '../bloc/list/employees_bloc.dart';
 import '../widgets/employee_list.dart';
 import '../widgets/employee_filter_bottom_sheet.dart';
@@ -34,6 +35,25 @@ class EmployeesView extends StatelessWidget {
         title: Text(
           l10n.employeeList,
         ),
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TalkerScreen(
+                        talker: getIt<Talker>(),
+                        appBarTitle: 'Logs',
+                        theme: const TalkerScreenTheme(
+                          backgroundColor: Colors.white,
+                          textColor: Colors.black,
+                          cardColor: Colors.grey,
+                          logColors: {TalkerLogType.route: Colors.black},
+                        ),
+                      )),
+            ),
+            icon: const Icon(Icons.bug_report),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
