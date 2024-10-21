@@ -36,6 +36,7 @@ class EmployeeCard extends StatelessWidget {
         ),
         title: Text(employee.fullName),
         subtitle: Text(employee.email),
+        
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),

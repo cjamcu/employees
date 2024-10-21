@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:employees/features/employess/domain/entities/employee.dart';
@@ -172,21 +173,38 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
           controller: _firstNameController,
           label: l10n.firstName,
           validator: validators.validateName,
+          maxLength: 20,
+          inputFormatters: [
+            UpperCaseTextFormatter(),
+            OnlyLettersTextFormatter()
+          ],
         ),
         CustomTextField(
           controller: _otherNamesController,
           label: l10n.otherNames,
           validator: validators.validateOtherNames,
+          maxLength: 50,
+          inputFormatters: [
+            UpperCaseTextFormatter(),
+            OnlyLettersTextFormatter()
+          ],
         ),
         CustomTextField(
           controller: _firstSurnameController,
           label: l10n.firstSurname,
           validator: validators.validateName,
+          maxLength: 20,
+          inputFormatters: [UpperCaseTextFormatter()],
         ),
         CustomTextField(
           controller: _secondSurnameController,
           label: l10n.secondSurname,
           validator: validators.validateName,
+          maxLength: 20,
+          inputFormatters: [
+            UpperCaseTextFormatter(),
+            OnlyLettersTextFormatter()
+          ],
         ),
         CustomDropdown(
           label: l10n.employmentCountry,
@@ -216,6 +234,8 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
           controller: _idNumberController,
           label: l10n.idNumber,
           validator: validators.validateIdNumber,
+          maxLength: 20,
+          inputFormatters: [IdentificationTextFormatter()],
         ),
         if (!widget.isEditing)
           CustomDatePicker(
