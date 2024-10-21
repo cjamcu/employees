@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
@@ -36,7 +37,10 @@ class PhotoSection extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: photoFile == null
-                        ? Image.network(photoUrl!, fit: BoxFit.cover)
+                        ? CachedNetworkImage(
+                            imageUrl: photoUrl!,
+                            fit: BoxFit.cover,
+                          )
                         : Image.file(photoFile!, fit: BoxFit.cover),
                   ),
                   Positioned(
