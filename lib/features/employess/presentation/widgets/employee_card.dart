@@ -23,8 +23,15 @@ class EmployeeCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
       child: ExpansionTile(
         leading: CircleAvatar(
-          backgroundImage: CachedNetworkImageProvider(
-            employee.photoUrl,
+          child: ClipOval(
+            child: CachedNetworkImage(
+              imageUrl: employee.photoUrl,
+              fit: BoxFit.cover,
+              width: 60,
+              height: 60,
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ),
           ),
         ),
         title: Text(employee.fullName),
