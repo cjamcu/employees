@@ -60,11 +60,6 @@ class OnlyLettersTextFormatter extends TextInputFormatter {
   }
 }
 
-// Identificación: Es el número de identificación del empleado, debe ser
-// alfanumérico permitiendo los siguientes conjuntos de caracteres (a-z / AZ / 0-9 / -). No
-// podrán existir dos empleados con el mismo número y tipo de identificación. Su longitud
-// máxima serán 20 caracteres.
-
 class IdentificationTextFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
