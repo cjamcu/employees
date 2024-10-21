@@ -2,10 +2,11 @@
 
 ## 📝 Resumen del Proyecto
 
-Employees App es una aplicación Flutter diseñada para gestionar información de empleados. Ofrece funcionalidades como:
+Employees App es una aplicación Flutter diseñada para gestionar información de empleados de manera eficiente. Ofrece las siguientes funcionalidades:
 
-- 📋 Visualizar una lista de empleados
+- 📋 Visualizar una lista de empleados con paginación infinita (10 elementos por página)
 - ➕ Agregar nuevos empleados con validación de datos
+- ✏️ Editar información de empleados existentes
 - 🔍 Filtrar y buscar empleados
 - 🗑️ Eliminar registros de empleados
 
